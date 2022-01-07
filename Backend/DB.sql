@@ -54,11 +54,18 @@ CREATE TABLE moves (
 );
 
 
--- Sprawdza czy gracz biały i czarny ruszają się na przemian. Dodatkowo pilnuje, aby numery tur się zgadzały.
+-- Sprawdza czy gracz biały i czarny ruszają się na przemian. Dodatkowo pilnuje, aby numery tur się zgadzały oraz żeby nie dało się dodawać ruchów do skończonych gier.
 CREATE OR REPLACE FUNCTION valid_move() RETURNS TRIGGER AS $$
 DECLARE
     last_move moves%rowtype;
+    running BOOLEAN;
 BEGIN
+    SELECT is_running INTO running
+        FROM games WHERE games.game_id = NEW.game_id;
+    IF(NOT running) THEN
+        RETURN NULL;
+    END IF;
+
     SELECT * INTO last_move
         FROM moves AS m 
         WHERE m.game_id = NEW.game_id 
