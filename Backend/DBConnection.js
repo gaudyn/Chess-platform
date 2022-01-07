@@ -1,5 +1,9 @@
 const { client } = require('./DBSecrets');
 
+/**
+ * Creates a database client and connects it to the database
+ * @returns connected client
+ */
 async function getClient(){
     const db = client();
     try {
@@ -10,8 +14,12 @@ async function getClient(){
         console.log('Could not connect to db: '+ err);
     }
 }
-
-async function createAnononymousAccount(username) {
+/**
+ * Creates an anonymous account.
+ * @param {String} username - account's username 
+ * @throws The username is taken, so the account could not be registered.
+ */
+async function createAnonymousAccount(username) {
     const db = await getClient();
     try {
         const res = await db.query('INSERT INTO users(username) VALUES ($1)', [username]);
@@ -22,7 +30,12 @@ async function createAnononymousAccount(username) {
         throw Error('Username taken');
     }
 }
-
+/**
+ * Registers a user.
+ * @param {String} username - account's username 
+ * @param {String} password - account's password, hashed with SHA-512
+ * @throws The username is taken, so the account could not be registered.
+ */
 async function registerAccount(username, password) {
     const db = await getClient();
     try {
@@ -33,7 +46,12 @@ async function registerAccount(username, password) {
         throw Error('Could not register user: ' + err);
     }
 }
-
+/**
+ * Checks is the user's password is valid.
+ * @param {String} username - account's username
+ * @param {String} password - account's password, hashed with SHA-512
+ * @returns `true` if the password is correct, `false` otherwise
+ */
 async function isPasswordCorrect(username, password) {
     const db = await getClient();
     try {
@@ -48,7 +66,11 @@ async function isPasswordCorrect(username, password) {
     }
     return false;
 }
-
+/**
+ * Gets player id
+ * @param {String} username - account's username 
+ * @returns {Promise<Number>}
+ */
 async function getPlayerId(username) {
     const db = await getClient();
     try {
@@ -60,7 +82,12 @@ async function getPlayerId(username) {
         throw Error(`User ${username} does not exist`);
     }
 }
-
+/**
+ * Creates a new game with selected players and options.
+ * @param {string} white_player - White player's username
+ * @param {string} black_player - Black player's username
+ * @param {string} options - Game options
+ */
 async function createNewGame(white_player, black_player, options) {
     const db = await getClient();
     try {
@@ -73,14 +100,22 @@ async function createNewGame(white_player, black_player, options) {
         throw Error('Could not create a new game ' + err);
     }
 }
-
+/**
+ * Gets all games.
+ * @returns 
+ */
 async function getGames() {
     const db = await getClient();
     const res = await db.query('SELECT * FROM games');
     await db.end();
     return res.rows;
 }
-
+/**
+ * Adds a move to the game.
+ * @param {number} game_id - Game's id
+ * @param {string} player - Player's username
+ * @param {string} move - Player's move
+ */
 async function addMove(game_id, player, move) {
     const db = await getClient();
     try {
@@ -99,7 +134,11 @@ async function addMove(game_id, player, move) {
         throw Error('Could not add move: ' + err);
     }
 }
-
+/**
+ * Returns all moves in the game.
+ * @param {number} gameId - Game's id
+ * @returns 
+ */
 async function getMoves(gameId) {
     const db = await getClient();
     const res = await db.query('SELECT * FROM moves WHERE game_id = $1', [gameId]);
@@ -108,7 +147,7 @@ async function getMoves(gameId) {
 }
 
 exports.users = {
-    createAnonymousAccout: createAnononymousAccount,
+    createAnonymousAccount: createAnonymousAccount,
     createAccout: registerAccount,
     logIn: isPasswordCorrect
 }
