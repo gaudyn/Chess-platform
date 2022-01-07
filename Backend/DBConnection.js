@@ -145,6 +145,15 @@ async function getMoves(gameId) {
     await db.end();
     return res.rows;
 }
+/**
+ * Finishes the game - new moves cannot be added.
+ * @param {number} gameId - Game's id
+ */
+async function finishGame(gameId) {
+    const db = await getClient();
+    await db.query('UPDATE games SET is_running = false WHERE game_id = $1', [gameId]);
+    await db.end();
+}
 
 exports.users = {
     createAnonymousAccount: createAnonymousAccount,
@@ -159,5 +168,6 @@ exports.games = {
 
 exports.moves = {
     addMove: addMove,
-    getMoves: getMoves
+    getMoves: getMoves,
+    finishGame: finishGame
 }
