@@ -68,8 +68,7 @@ async function isPasswordCorrect(username, password) {
 }
 /**
  * Gets player id
- * @param {String} username - account's username 
- * @returns {Promise<Number>}
+ * @param {String} username - account's username
  */
 async function getPlayerId(username) {
     const db = await getClient();
@@ -102,7 +101,7 @@ async function createNewGame(white_player, black_player, options) {
 }
 /**
  * Gets all games.
- * @returns 
+ * @returns Array of all games
  */
 async function getGames() {
     const db = await getClient();
@@ -137,7 +136,7 @@ async function addMove(game_id, player, move) {
 /**
  * Returns all moves in the game.
  * @param {number} gameId - Game's id
- * @returns 
+ * @returns Array of all the moves in the game
  */
 async function getMoves(gameId) {
     const db = await getClient();
