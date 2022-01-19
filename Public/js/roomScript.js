@@ -23,9 +23,7 @@ function ConnectionHandler(username) {
                 whitePlayer.innerHTML = player
             } else if (place == 'black') {
                 blackPlayer.innerHTML = player
-            } else {
-                audience.innerHTML = player
-            }
+            } 
         });
 
         socket.on('move', (move, player) => {
