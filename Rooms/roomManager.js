@@ -8,12 +8,14 @@ function RoomManager() {
      * Connects user to the room. Creates new room if it doesn't exists.
      * @param {string} username User's username
      * @param {string} roomId Room's id
+     * @returns {Room} Room that the user connected to.
      */
     this.connectUserToRoom = function(username, roomId) {
         if (!this.rooms[roomId]) {
             this.rooms[roomId] = new Room();
         }
         this.rooms[roomId].connectUser(username);
+        return this.rooms[roomId];
     }
 
     /**

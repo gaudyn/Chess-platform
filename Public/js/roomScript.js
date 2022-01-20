@@ -1,7 +1,12 @@
 console.log('Client connected to server!');
 
+/**@type {HTMLElement} */
 var whitePlayer;
+
+/**@type {HTMLElement} */
 var blackPlayer;
+
+/**@type {HTMLElement} */
 var audience;
 
 
@@ -15,7 +20,7 @@ function ConnectionHandler(username) {
             console.log('Fill room with '+ room.toString());
             whitePlayer.innerHTML = room.whitePlayer;
             blackPlayer.innerHTML = room.blackPlayer;
-            audience.innerHTML = room.audience.toString();
+            audience.innerHTML = room.audience.join(', ');
         })
 
         socket.on('claimPlace', (place, player) => {
@@ -24,6 +29,15 @@ function ConnectionHandler(username) {
             } else if (place == 'black') {
                 blackPlayer.innerHTML = player
             } 
+        });
+
+        socket.on('removePlayer', (username) => {
+            let connectedUsers = audience.innerHTML.split(', ');
+            let index = connectedUsers.indexOf(username);
+            if (index >= 0){
+                connectedUsers.splice(index, 1);
+            }
+            audience.innerHTML = connectedUsers.join(', ');
         });
 
         socket.on('move', (move, player) => {
