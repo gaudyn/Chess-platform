@@ -12,7 +12,8 @@ app.set('views', './Views');
 
 app.use(express.static(__dirname + '/Public'));
 
-app.get('/room/:roomId', (req, res) => {
+app.get('/room/:roomId(\\d+)', (req, res) => {
+    // Zezwalamy tylko na numeryczne identyfikatory pokojów.
     // Strona z jedną rozgrywką
     res.render('room.ejs', {roomId: req.params.roomId});
 });
@@ -20,11 +21,11 @@ app.get('/room/:roomId', (req, res) => {
 var roomManager = new RoomManager();
 
 io.on('connection', (socket) => {
-    let username = socket.handshake.auth.username;
-    let roomId = socket.handshake.auth.roomId.toString();
+    var username = socket.handshake.auth.username;
+    var roomId = socket.handshake.auth.roomId.toString();
 
     console.log('Gracz '+ username +' przyłączony do pokoju '+ roomId);
-    let room = roomManager.connectUserToRoom(username, roomId);
+    var room = roomManager.connectUserToRoom(username, roomId);
     
     socket.join(roomId);
     io.to(roomId).emit('fillRoom', room);
@@ -36,10 +37,40 @@ io.on('connection', (socket) => {
         console.log('Gracz '+username+' został odłączony');
     });
 
+    /**@type {NodeJS.Timeout} */
+    var countdown;
+
     socket.on('claimPlace', (place) => {
         let players = roomManager.claimPlaceForUserInRoom(username, roomId, place);
+
+        if(username == players.white || username == players.black){
+            socket.join(`${roomId}-players`);
+        }
+
         io.to(roomId).emit('claimPlace', 'white', players.white);
         io.to(roomId).emit('claimPlace', 'black', players.black);
+
+        if(roomManager.canStartGameInRoom(roomId)) {
+            console.log(`Game in the room ${roomId} is about to start!`);
+            io.to(`${roomId}-players`).emit('gameCanStart');
+            // Countdown for players to start the game.
+            countdown = setTimeout( () => {
+                console.log(`Game in the room ${roomId} is cancelled!`);
+                roomManager.confirmStartForRoom(null, roomId);
+                io.to(roomId).emit('fillRoom', room);
+            }, 10000);
+        }
+    });
+    socket.on('confirmStart', () => {
+        if(countdown) {
+            let state = roomManager.confirmStartForRoom(username, roomId);
+            console.log(`Player ${username} has confimed start!`);
+            if (state == 'start') {
+                io.to(roomId).emit('gameStarted');
+                console.log(`Game in the room ${roomId} has started!`);
+                clearTimeout(countdown);
+            }
+        }
     });
 })
 

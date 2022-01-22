@@ -40,6 +40,14 @@ function ConnectionHandler(username) {
             audience.innerHTML = connectedUsers.join(', ');
         });
 
+        socket.on('gameCanStart', () => {
+            console.log('Zatwierdź grę '+username);
+        });
+
+        socket.on('gameStarted', () => {
+            console.log('Gra rozpoczęta!');
+        });
+
         socket.on('move', (move, player) => {
             // Update gameboard with new move
         });
@@ -58,6 +66,10 @@ function ConnectionHandler(username) {
 
     this.unclaimPlace = function(){
         this.socket.emit('claimPlace', 'watch');
+    }
+
+    this.confirmStart = function(){
+        this.socket.emit('confirmStart');
     }
 
     // Gameplay

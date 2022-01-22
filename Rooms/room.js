@@ -6,8 +6,8 @@ function Room(){
     /**@type {string[]} */
     this.audience = [];
 
-    /**@type {string} */
-    this.gameState = 'waiting';
+    /**@type {boolean} */
+    this.gameStarted = false;
 
     /**
      * Connects user to the room.
@@ -88,7 +88,7 @@ function Room(){
      * Starts a new game
      */
     this.startGame = function(){
-        this.gameState = 'running';
+        this.gameStarted = true;
         //TODO: Create a new game and save it in the database
     }
 
@@ -96,11 +96,51 @@ function Room(){
      * Ends the currently running game
      */
     this.endGame = function(){
-        this.gameState = 'waiting';
+        this.gameStarted = false;
         //TODO: Finish the game in the database
     }
-}
 
-let room = new Room();
+    /**
+     * Checks if the game can be started.
+     * @returns `true` if the game can be started, `false` otherwise.
+     */
+    this.canStartGame = function(){
+        if(!(this.gameStarted) && this.whitePlayer && this.blackPlayer) {
+            return true; 
+        }
+        return false;
+    }
+
+    
+
+    var whiteConfirm = false;
+    var blackConfirm = false;
+
+    /**
+     * Confirms start for a player.
+     * @param {string} player User's username. 
+     * @returns {`kick`|`start`|`wait`} `start` if the game started, `wait` if the room is still waiting for the other player, `kick` if the players have been kicked. 
+     */
+    this.confirmStart = function(player){
+        if (player == this.whitePlayer) {
+            whiteConfirm = true;
+        } else if (player == this.blackPlayer) {
+            blackConfirm = true;
+        } else if (!player) {
+            // Countdown ended. Kick not confirmed players from the places.
+            if(!whiteConfirm) this.whitePlayer = undefined;
+            if(!blackConfirm) this.blackPlayer = undefined;
+            whiteConfirm = false;
+            blackConfirm = false;
+            return 'kick';
+        }
+        if(whiteConfirm && blackConfirm) {
+            this.startGame();
+            return 'start';
+        } else {
+            return 'wait';
+        }
+    }
+}
 
 exports.Room = Room;

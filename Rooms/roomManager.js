@@ -63,6 +63,25 @@ function RoomManager() {
     this.finishGameInRoom = function (roomId) {
         this.rooms[roomId].finishGameInRoom();
     }
+
+    /**
+     * Checks if a new game can be started in the room.
+     * @param {string} roomId Room's id 
+     * @returns `true` if the game can be started, `false` otherwise
+     */
+    this.canStartGameInRoom = function (roomId) {
+        return this.rooms[roomId].canStartGame();
+    }
+
+    /**
+     * Confirms starting a new game by the player.
+     * @param {string} username User's username.
+     * @param {string} roomId Room's id.
+     * @returns {`kick`|`start`|`wait`} `start` if the game started, `wait` if the room is still waiting for the other player, `kick` if the players have been kicked.
+     */
+    this.confirmStartForRoom = function (username, roomId) {
+        return this.rooms[roomId].confirmStart(username);
+    }
 }
 
 exports.RoomManager = RoomManager;
