@@ -6,6 +6,9 @@ function Room(){
     /**@type {string[]} */
     this.audience = [];
 
+    /**@type {string} */
+    this.gameState = 'waiting';
+
     /**
      * Connects user to the room.
      * @param {string} username User's username.
@@ -79,6 +82,22 @@ function Room(){
             white : this.whitePlayer,
             black : this.blackPlayer
         };
+    }
+
+    /**
+     * Starts a new game
+     */
+    this.startGame = function(){
+        this.gameState = 'running';
+        //TODO: Create a new game and save it in the database
+    }
+
+    /**
+     * Ends the currently running game
+     */
+    this.endGame = function(){
+        this.gameState = 'waiting';
+        //TODO: Finish the game in the database
     }
 }
 

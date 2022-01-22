@@ -47,6 +47,22 @@ function RoomManager() {
         }
         throw Error('Unexpected place');
     }
+
+    /**
+     * Starts a new game in the selected room.
+     * @param {string} roomId Room's id 
+     */
+    this.startGameInRoom = function (roomId) {
+        this.rooms[roomId].startGameInRoom();
+    }
+
+    /**
+     * Ends the game in the selected room.
+     * @param {string} roomId Room's id 
+     */
+    this.finishGameInRoom = function (roomId) {
+        this.rooms[roomId].finishGameInRoom();
+    }
 }
 
 exports.RoomManager = RoomManager;
