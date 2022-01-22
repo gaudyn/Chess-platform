@@ -93,11 +93,21 @@ function RoomManager() {
     }
 
     /**
-     * Makes a move in the selected room by user.
+     * Checks if a move by user is valid in the selected room.
      * @param {string} username User's username.
      * @param {string} roomId Room's id.
      * @param {string} move Chess move.
      * @returns {boolean} `true` if the move is valid, `false` otherwise.
+     */
+    this.checkMoveInRoom = function (username, roomId, move) {
+        return this.rooms[roomId].isMoveValid(username, move);
+    }
+    /**
+     * Makes a move in the selected room by user.
+     * @param {string} username User's username.
+     * @param {string} roomId Room's id.
+     * @param {string} move Chess move.
+     * @returns {boolean} `true` if the game has ended, `false` otherwise.
      */
     this.makeMoveInRoom = function (username, roomId, move) {
         return this.rooms[roomId].makeMove(username, move);

@@ -75,9 +75,11 @@ io.on('connection', (socket) => {
     });
 
     socket.on('makeMove', (move) => {
-        if(roomManager.makeMoveInRoom(username, roomId, move)){
+        if(roomManager.checkMoveInRoom(username, roomId, move)){
             // Valid move
+            let gameEnded = roomManager.makeMoveInRoom(username, roomId, move);
             io.to(roomId).emit('newMove', move, username);
+            if (gameEnded) io.to(roomId).emit('gameEnded');
         } else {
             // Invalid move, kick the player!
             roomManager.claimPlaceForUserInRoom(username, roomId, 'watch');

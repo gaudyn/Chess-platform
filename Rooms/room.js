@@ -143,26 +143,26 @@ function Room(){
     }
 
     /**
-     * Makes a move by user.
+     * Checks if a move by user is valid.
      * @param {string} username User's username.
-     * @param {string} roomId Room's id.
      * @param {string} move Chess move.
      * @returns {boolean} `true` if the move is valid, `false` otherwise.
      */
-    this.makeMove = function (username, move) {
+    this.isMoveValid = function(username, move){
         if(!this.gameStarted) return false;
-        
-        let color;
-        if(this.whitePlayer == username){
-            color = 'white';
-        } else if (this.blackPlayer == username) {
-            color = 'black';
-        } else {
-            return false;
-        }
         // Sprawdź czy ruch jest dobry
-        // Zapisz ruch w bazie danych
         return true;
+    }
+    /**
+     * Makes a move by user.
+     * @param {string} username User's username.
+     * @param {string} move Chess move.
+     * @returns {boolean} `true` if the game has ended, `false` otherwise.
+     */
+    this.makeMove = function (username, move) {
+        // Zapisz ruch w bazie danych
+        if (move == 'end') return true;
+        return false;
     }
 }
 
