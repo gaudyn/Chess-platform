@@ -55,6 +55,7 @@ io.on('connection', (socket) => {
             io.to(`${roomId}-players`).emit('gameCanStart');
             // Countdown for players to start the game.
             countdown = setTimeout( () => {
+                if(roomManager.isGameRunningInRoom(roomId)) return;
                 console.log(`Game in the room ${roomId} is cancelled!`);
                 roomManager.confirmStartForRoom(null, roomId);
                 io.to(roomId).emit('fillRoom', room);

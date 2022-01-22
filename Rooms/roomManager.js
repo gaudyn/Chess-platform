@@ -84,6 +84,15 @@ function RoomManager() {
     }
 
     /**
+     * Checks if a game is running in the room.
+     * @param {string} roomId Room's id 
+     * @returns `true` if there is a running game, `false` otherwise.
+     */
+    this.isGameRunningInRoom = function (roomId) {
+        return this.rooms[roomId].gameStarted;
+    }
+
+    /**
      * Makes a move in the selected room by user.
      * @param {string} username User's username.
      * @param {string} roomId Room's id.
