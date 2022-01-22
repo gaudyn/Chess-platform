@@ -85,7 +85,7 @@ function Room(){
     }
 
     /**
-     * Starts a new game
+     * Starts a new game.
      */
     this.startGame = function(){
         this.gameStarted = true;
@@ -93,7 +93,7 @@ function Room(){
     }
 
     /**
-     * Ends the currently running game
+     * Ends the currently running game.
      */
     this.endGame = function(){
         this.gameStarted = false;
@@ -127,7 +127,7 @@ function Room(){
         } else if (player == this.blackPlayer) {
             blackConfirm = true;
         } else if (!player) {
-            // Countdown ended. Kick not confirmed players from the places.
+            // Countdown ended. Kick not confirmed players out from their places.
             if(!whiteConfirm) this.whitePlayer = undefined;
             if(!blackConfirm) this.blackPlayer = undefined;
             whiteConfirm = false;

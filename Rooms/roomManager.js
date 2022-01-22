@@ -6,8 +6,8 @@ function RoomManager() {
 
     /**
      * Connects user to the room. Creates new room if it doesn't exists.
-     * @param {string} username User's username
-     * @param {string} roomId Room's id
+     * @param {string} username User's username.
+     * @param {string} roomId Room's id.
      * @returns {Room} Room that the user connected to.
      */
     this.connectUserToRoom = function(username, roomId) {
@@ -50,7 +50,7 @@ function RoomManager() {
 
     /**
      * Starts a new game in the selected room.
-     * @param {string} roomId Room's id 
+     * @param {string} roomId Room's id.
      */
     this.startGameInRoom = function (roomId) {
         this.rooms[roomId].startGameInRoom();
@@ -58,7 +58,7 @@ function RoomManager() {
 
     /**
      * Ends the game in the selected room.
-     * @param {string} roomId Room's id 
+     * @param {string} roomId Room's id.
      */
     this.finishGameInRoom = function (roomId) {
         this.rooms[roomId].finishGameInRoom();
@@ -66,8 +66,8 @@ function RoomManager() {
 
     /**
      * Checks if a new game can be started in the room.
-     * @param {string} roomId Room's id 
-     * @returns `true` if the game can be started, `false` otherwise
+     * @param {string} roomId Room's id.
+     * @returns `true` if the game can be started, `false` otherwise.
      */
     this.canStartGameInRoom = function (roomId) {
         return this.rooms[roomId].canStartGame();
