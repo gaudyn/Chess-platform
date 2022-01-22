@@ -82,6 +82,17 @@ function RoomManager() {
     this.confirmStartForRoom = function (username, roomId) {
         return this.rooms[roomId].confirmStart(username);
     }
+
+    /**
+     * Makes a move in the selected room by user.
+     * @param {string} username User's username.
+     * @param {string} roomId Room's id.
+     * @param {string} move Chess move.
+     * @returns {boolean} `true` if the move is valid, `false` otherwise.
+     */
+    this.makeMoveInRoom = function (username, roomId, move) {
+        return this.rooms[roomId].makeMove(username, move);
+    }
 }
 
 exports.RoomManager = RoomManager;

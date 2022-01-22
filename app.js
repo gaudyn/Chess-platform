@@ -72,6 +72,16 @@ io.on('connection', (socket) => {
             }
         }
     });
+
+    socket.on('makeMove', (move) => {
+        if(roomManager.makeMoveInRoom(username, roomId, move)){
+            // Valid move
+            io.to(roomId).emit('newMove', move, username);
+        } else {
+            // Invalid move, kick the player!
+            roomManager.claimPlaceForUserInRoom(username, roomId, 'watch');
+        }
+    })
 })
 
 

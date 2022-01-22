@@ -48,8 +48,12 @@ function ConnectionHandler(username) {
             console.log('Gra rozpoczęta!');
         });
 
-        socket.on('move', (move, player) => {
-            // Update gameboard with new move
+        socket.on('gameEnded', () => {
+            console.log('Gra zakończona');
+        });
+
+        socket.on('newMove', (move, player) => {
+            console.log(`Nowy ruch ${move} wykonany przez ${player}!`);
         });
 
         return socket;
@@ -74,7 +78,7 @@ function ConnectionHandler(username) {
 
     // Gameplay
     this.makeMove = function(move){
-        this.socket.emit('move', move);
+        this.socket.emit('makeMove', move);
     }
 }
 

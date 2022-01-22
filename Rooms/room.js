@@ -141,6 +141,29 @@ function Room(){
             return 'wait';
         }
     }
+
+    /**
+     * Makes a move by user.
+     * @param {string} username User's username.
+     * @param {string} roomId Room's id.
+     * @param {string} move Chess move.
+     * @returns {boolean} `true` if the move is valid, `false` otherwise.
+     */
+    this.makeMove = function (username, move) {
+        if(!this.gameStarted) return false;
+        
+        let color;
+        if(this.whitePlayer == username){
+            color = 'white';
+        } else if (this.blackPlayer == username) {
+            color = 'black';
+        } else {
+            return false;
+        }
+        // Sprawdź czy ruch jest dobry
+        // Zapisz ruch w bazie danych
+        return true;
+    }
 }
 
 exports.Room = Room;
