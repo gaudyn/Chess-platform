@@ -89,6 +89,8 @@ function Room(){
      */
     this.startGame = function(){
         this.gameStarted = true;
+        whiteConfirm = false;
+        blackConfirm = false;
         //TODO: Create a new game and save it in the database
     }
 
