@@ -45,6 +45,8 @@ io.on('connection', (socket) => {
 
         if(username == players.white || username == players.black){
             socket.join(`${roomId}-players`);
+        } else {
+            socket.leave(`${roomId}-players`);
         }
 
         io.to(roomId).emit('claimPlace', 'white', players.white);
