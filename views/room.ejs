@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serwis szachowy - pokój <%= locals.roomId%>
+    </title>
+    <script>let roomId = <%= locals.roomId%>; </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="roomScript.js"></script>
+
+</head>
+
+<body>
+    <div>
+        Witaj w pokoju <%= locals.roomId%>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td>Białymi gra:</td>
+                <td>Czarnymi gra:</td>
+                <td>Gracze w pokoju</td>
+            </tr>
+            <tr>
+                <td id="whitePlayer">GRACZ 1</td>
+                <td id="blackPlayer">GRACZ 2</td>
+                <td id="audience">GRACZ 1, GRACZ 2</td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <table id="moves">
+            <tr>
+                <td>Runda</td>
+                <td>Ruch białych</td>
+                <td>Ruch czarnych</td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="position: absolute; top: 400px; left: 600px; font-size: 25px">
+        Make a move <br />
+        From: <input type="text" id="moveFrom"><br />
+        To: <input type="text" id="moveTo"><br />
+        <button id="move">Move</button>
+
+    </div>
+
+    <div style="position: absolute; top: 400px; left: 200px; font-size: 25px" id="Moves">
+        Moves made so far: <br />
+
+    </div>
+
+
+    <div style="position: absolute; top: 300px; left: 600px; font-size: 25px" >
+        Time:
+    </div>
+
+    <button style="position: absolute; top: 50px; right: 100px; font-size: 25px"
+            onclick='window.alert("Are you sure you want to exit the game?")'>
+            Exit
+    </button>
+
+
+</body>
+
+</html>
