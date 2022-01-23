@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Serwis szachowy - strona powitalna</title>
 
     <link rel="stylesheet" href="style.css" />
 
 </head>
-<body style="background-color:rgb(204, 178, 138);">
+
+<body style="background-color:rgb(204, 178, 138); font-size: 30px">
     
 <h1>Welcome to Chess Platform!</h1>
 
-<div class="maintext" style="font-size: 30px";>
-    Enter your nick: <input type="text"><br />
-    <a href="./waitroom">Enter</a>
-    
 </div>
+<% if ( locals.message ) { %>
+    <div class='message'>
+        <%= locals.message %>
+    </div>
+    <% } %>
+</div>
+
+
+
+<a href="./register">create an account</a>
+<br />
+<a href="./login">log in</a>
+<br />
+<a href="./noAccount">continue without an account</a>
 
 
 
