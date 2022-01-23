@@ -3,6 +3,7 @@
 
 .maintext {
     position: absolute;
+    font-size: 25px;
     left: 50%;
     top: 50%;
     -moz-transform: translateX(-50%) translateY(-50%);
@@ -14,13 +15,6 @@ h1{
     text-align: center;
     font-size: 50px;
 }
-
-
-
-
-.foo {
-    color: blue
-   }
 
 
 
