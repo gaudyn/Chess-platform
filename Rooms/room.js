@@ -113,8 +113,6 @@ function Room(){
         return false;
     }
 
-    
-
     var whiteConfirm = false;
     var blackConfirm = false;
 
@@ -129,7 +127,7 @@ function Room(){
         } else if (player == this.blackPlayer) {
             blackConfirm = true;
         } else if (!player) {
-            // Countdown ended. Kick not confirmed players out from their places.
+            // Kick not confirmed players out from their places.
             if(!whiteConfirm) this.whitePlayer = undefined;
             if(!blackConfirm) this.blackPlayer = undefined;
             whiteConfirm = false;
@@ -152,7 +150,7 @@ function Room(){
      */
     this.isMoveValid = function(username, move){
         if(!this.gameStarted) return false;
-        // Sprawdź czy ruch jest dobry
+        // TODO: Check in engine if the move is valid
         return true;
     }
     /**
@@ -162,7 +160,7 @@ function Room(){
      * @returns {boolean} `true` if the game has ended, `false` otherwise.
      */
     this.makeMove = function (username, move) {
-        // Zapisz ruch w bazie danych
+        // TODO: Save the move in the database
         if (move == 'end') return true;
         return false;
     }

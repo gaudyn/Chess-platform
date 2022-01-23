@@ -13,8 +13,7 @@ app.set('views', './Views');
 app.use(express.static(__dirname + '/Public'));
 
 app.get('/room/:roomId(\\d+)', (req, res) => {
-    // Zezwalamy tylko na numeryczne identyfikatory pokojów.
-    // Strona z jedną rozgrywką
+    // Enable only numeric ids for rooms
     res.render('room.ejs', {roomId: req.params.roomId});
 });
 
