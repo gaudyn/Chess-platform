@@ -150,6 +150,7 @@ function Room(){
      */
     this.isMoveValid = function(username, move){
         if(!this.gameStarted) return false;
+        if(this.blackPlayer != username && this.whitePlayer != username) return false;
         // TODO: Check in engine if the move is valid
         return true;
     }
