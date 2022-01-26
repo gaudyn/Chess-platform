@@ -87,20 +87,3 @@ window.addEventListener('load', (window, event) => {
     blackPlayer = document.getElementById('blackPlayer');
     audience = document.getElementById('audience');
 });
-
-window.addEventListener('load', function(){     // to dopisałem
-    var socket = io();
-
-    var buttonMove = window.document.getElementById('move'); 
-    buttonMove.addEventListener('click', function() {
-        var from = window.document.getElementById('moveFrom');
-        var to = window.document.getElementById('moveTo');
-        socket.broadcast.emit('newMove', from.value.toString() + "->" + to.value.toString());
-    });
-    
-
-    socket.on('newMove', function(data) {
-        var movesList = document.getElementById('Moves');
-        movesList.innerHTML += data + "<br/>";
-        });
-})
