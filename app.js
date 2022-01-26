@@ -3,7 +3,7 @@ var authorize = require('./authorize');
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var socket = require('socket.io');
-var {users, games, moves} = require('./Backend/DBConnection');
+var {users, games, moves} = require('./Database/DBConnection');
 const { Server } = require('socket.io');
 const { RoomManager } = require('./Rooms/roomManager');
 
@@ -82,8 +82,6 @@ app.post('/login', (req, res) => {
             username: loginUsername,
             userType: 'loggedIn'
         });
-        console.log(loginUsername);
-
         res.cookie('cookie', cookieValue, {signed: true});
         res.redirect('./waitroom');
     } else {
@@ -103,7 +101,7 @@ app.post('/register', (req, res) => {
         registerPassword != false &&
         registerUsername != false) {
         try {
-            registerAccount(registerUsername, registerPassword) 
+            //registerAccount(registerUsername, registerPassword) 
             res.render( 'register', { message : "Account created succesfully!" } );
         }
         catch(err) {
@@ -129,8 +127,6 @@ app.post('/noAccount', (req, res) => {
             });
     
             res.cookie('cookie', cookieValue, {signed: true});
-            var readcookie = req.signedCookies.cookie;
-            console.log(readcookie);
             res.redirect( './waitroom');
         }
         catch(err) {

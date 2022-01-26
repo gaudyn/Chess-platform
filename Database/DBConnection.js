@@ -162,7 +162,7 @@ async function finishGame(gameId) {
 exports.users = {
     createAnonymousAccount: createAnonymousAccount,
     createAccout: registerAccount,
-    logIn: isPasswordCorrect
+    logIn: checkUser
 }
 
 exports.games = {
