@@ -27,7 +27,7 @@ var move_number = 1
 
 /**
  * Initializes the board and pieces on it. 
- * Generally does everything neccesary before starting the game.
+ * Generally does everything necessary before starting the game.
  */
 function initialize() {
     turn = WHITE
@@ -71,3 +71,29 @@ function remove(square) {
     return piece
 }
 
+/**
+ * Puts the piece on the square.
+ * @param {*} piece 
+ * @param {*} square 
+ */
+function put(piece, square) {
+    var sq = SQUARES[square]
+    board[sq] = { type: piece.type, color: piece.color }
+    if (piece.type === KING) {
+      kings[piece.color] = sq
+    }
+}
+
+function check_move(from, to) { //oh boy, here we go
+    //1. check if the 'to' square is empty or if it is a legal attack
+    //2. check if the piece's move is legal (for example if the bishop runs diagonally)
+    //3. check if the king is (still) checked
+    //4. check if the move is even on board :) (idk if this is necessary, maybe not)
+}
+
+function make_move(from, to) { //a lot TODO here
+    //maybe we should check here if a king is checked
+    //but i'm not sure about localization of that in code
+    var piece = remove(from)
+    put(piece, to)
+}
