@@ -6,46 +6,41 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serwis szachowy - strona logowania</title>
-
     <link rel="stylesheet" href="style.css" />
-
 </head>
+
 
 <body class=maintext style="background-color:rgb(204, 178, 138);">
 
     <h1>Welcome to Chess Platform!</h1>
 
-
-    <form method="POST">
-        <div id='login'>
-            <div>
-                Log in to your account.
-            </div>
-            <br />
-            <div>
-                <label>Nazwa użytkownika:</label>
-                <input type='text' name='txtUser' />
-            </div>
-            <div>
-                <label>Hasło:</label>
-                <input type='password' name='txtPwd' />
-            </div>
-            <div>
-                <button>Zaloguj</button>
-            </div>
-            <% if ( locals.message ) { %>
-                <div class='message'>
-                    <%= locals.message %>
-                </div>
-                <% } %>
+<form method="POST">
+    <div id="login">
+        <div>
+            Log in to your account.
+        </div>
+        <br />
+        <div>
+            <label>Enter your username:</label>
+            <input type='text' name='UsernameInput' />
+        </div>
+        <div>
+            <label>Enter your password:</label>
+            <input type='password' name='PasswordInput' />
+        </div>
+        <div>
+            <button id="loginButton">Log in</button>
         </div>
 
-    </form>
+        <% if ( locals.message ) { %>
+            <div class='message'>
+                <%= locals.message %>
+            </div>
+        <% } %>
+    </div>
+</form>
 
-    <a href="./">Cancel</a>
-
-
-
+    <a href="./">Back</a>
 
 
 </body>

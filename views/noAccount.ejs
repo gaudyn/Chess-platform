@@ -17,33 +17,28 @@
 
 
     <form method="POST">
-        <div id='login'>
+        <div id="noAcc">
             <div>
                 If you want to contiunue without an account, simply choose your username.
             </div>
             <br />
             <div>
-                <label>Nazwa użytkownika:</label>
-                <input type='text' name='txtUser' />
+                <label>Choose your username:</label>
+                <input type='text' name='UsernameInput' />
             </div>
             <div>
-                <button>Enter</button>
+                <button id="noAccButton">Continue</button>
             </div>
+    
             <% if ( locals.message ) { %>
                 <div class='message'>
                     <%= locals.message %>
                 </div>
-                <% } %>
+            <% } %>
         </div>
     </form>
-
-
-    <a href="./">Cancel</a>
-
-
-
-
-
+  
+    <a href="./">Back</a>
 
 </body>
 

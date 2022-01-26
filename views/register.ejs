@@ -15,33 +15,37 @@
 
     <h1>Welcome to Chess Platform!</h1>
 
-
-    <form method="POST">
-        <div id='login'>
-            <div>
-                In order to create an account, choose an username and a password. 
-            </div>
-            <br />
-            <div>
-                <label>Nazwa użytkownika:</label>
-                <input type='text' name='txtUser' />
-            </div>
-            <div>
-                <label>Hasło:</label>
-                <input type='password' name='txtPwd' />
-            </div>
-            <div>
-                <button>Register</button>
-            </div>
-            <% if ( locals.message ) { %>
-                <div class='message'>
-                    <%= locals.message %>
-                </div>
-                <% } %>
+<form method="POST">
+    <div id="login">
+        <div>
+            In order to create an account, choose an username and a password. 
         </div>
-    </form>
+        <br />
+        <div>
+            <label>Enter your username:</label>
+            <input type='text' name='UsernameInput' />
+        </div>
+        <div>
+            <label>Enter your password:</label>
+            <input type='password' name='PasswordInput' />
+        </div>
+        <div>
+            <label>Confirm your password:</label>
+            <input type='password' name='PasswordConfirmationInput' />
+        </div>
+        <div>
+            <button id="registerButton">Register</button>
+        </div>
 
-    <a href="./">Cancel</a>
+        <% if ( locals.message ) { %>
+            <div class='message'>
+                <%= locals.message %>
+            </div>
+        <% } %>
+    </div>
+</form>
+
+    <a href="./">Back</a>
 
 </body>
 
