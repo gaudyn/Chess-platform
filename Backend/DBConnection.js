@@ -57,7 +57,7 @@ async function registerAccount(username, password) {
 async function checkUser(username, password) {
     const db = await getClient();
     try {
-        const res = await db.query('SELECT * FROM users WHERE username = $1 RETURNING password', [username, password]);
+        const res = await db.query('SELECT * FROM users WHERE username = $1', [username, password]);
         await db.end;
         if (res.rows[0].password) {
             const match = await bcrypt.compare(password, res.rows[0].password)
