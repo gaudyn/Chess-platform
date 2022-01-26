@@ -1,4 +1,5 @@
 const { client } = require('./DBSecrets');
+const bcrypt = require('bcrypt');
 
 /**
  * Creates a database client and connects it to the database
@@ -39,12 +40,13 @@ async function createAnonymousAccount(username) {
 async function registerAccount(username, password) {
     const db = await getClient();
     try {
-        const res = await db.query('INSERT INTO users(username, password) VALUES ($1, $2)', [username, password]);
+        const passwordHash = await bcrypt.hash(password, 10);
+        const res = await db.query('INSERT INTO users(username, password) VALUES ($1, $2)', [username, passwordHash]);
         await db.end();
     } catch(err) {
         await db.end();
         throw Error('Could not register user: ' + err);
-    }
+    }    
 }
 /**
  * Checks is the user's password is valid.
@@ -52,13 +54,14 @@ async function registerAccount(username, password) {
  * @param {String} password - account's password, hashed with SHA-512
  * @returns `true` if the password is correct, `false` otherwise
  */
-async function isPasswordCorrect(username, password) {
+async function checkUser(username, password) {
     const db = await getClient();
     try {
-        const res = await db.query('SELECT password=$2 as is_correct FROM users WHERE username = $1', [username, password]);
+        const res = await db.query('SELECT * FROM users WHERE username = $1 RETURNING password', [username, password]);
         await db.end;
-        if (res.rows[0].is_correct) {
-            return true;
+        if (res.rows[0].password) {
+            const match = await bcrypt.compare(password, res.rows[0].password)
+            if(match) return true;
         }
     } catch(err) {
         await db.end;
@@ -86,14 +89,16 @@ async function getPlayerId(username) {
  * @param {string} white_player - White player's username
  * @param {string} black_player - Black player's username
  * @param {string} options - Game options
+ * @returns {number} Game id used for database operations
  */
 async function createNewGame(white_player, black_player, options) {
     const db = await getClient();
     try {
         const white_player_id = await getPlayerId(white_player);
         const black_player_id = await getPlayerId(black_player);
-        const res = await db.query('INSERT INTO games(wh_player, bl_player, options) VALUES ($1, $2, $3)', [white_player_id, black_player_id, options]);
+        const res = await db.query('INSERT INTO games(wh_player, bl_player, options) VALUES ($1, $2, $3) RETURNING game_id', [white_player_id, black_player_id, options]);
         await db.end();
+        return res.rows[0].game_id;
     } catch (err) {
         await db.end();
         throw Error('Could not create a new game ' + err);
