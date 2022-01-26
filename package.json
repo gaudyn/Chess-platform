@@ -1,8 +1,12 @@
 {
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "browserify": "^17.0.0",
     "cookie-parser": "^1.4.6",
     "ejs": "^3.1.6",
     "express": "^4.17.2",
+    "multer": "^1.4.4",
+    "pg": "^8.7.1",
     "socket.io": "^4.4.1"
   }
 }
