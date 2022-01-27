@@ -28,7 +28,7 @@ class Board extends React.Component {
     }
 
     handleClick(x,y) {
-        const squares = this.state.pieces.slice();
+        let squares = this.state.pieces.slice();
         if (!this.state.fromSquare) {
             // Clicked first square
             this.setState({
@@ -42,8 +42,10 @@ class Board extends React.Component {
                 fromSquare: null
             });
         } else {
-            const fromSquare = this.state.fromSquare.slice();
-            console.log("From:" + fromSquare + " to: " + [x,y]);
+            const [x1, y1] = this.state.fromSquare.slice();
+            squares[y][x] = squares[y1][x1];
+            squares[y1][x1] = ' ';
+            console.log("From:" + [x1,y1] + " to: " + [x,y]);
             // Make move
             this.setState({
                 pieces: squares,
