@@ -6,7 +6,6 @@
 
 .square {
     background: #fff;
-    border: 1px solid #999;
     float: left;
     font-size: 70px;
     font-weight: bold;
@@ -19,7 +18,6 @@
     width: 70px;
 }
 
-.game {
-    display: flex;
-    flex-direction: row;
+.gameboard {
+    border: 1px solid black;
 }
