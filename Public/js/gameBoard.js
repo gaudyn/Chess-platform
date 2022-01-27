@@ -17,9 +17,9 @@ function Square(props) {
 }
 
 class Board extends React.Component {
-    constructor() {
-        super()
-        this.pieces = [
+    constructor(props) {
+        super(props)
+        this.state.pieces = [
             ['♜','♞','♝','♚','♛','♝','♞','♜'],
             ['♟','♟','♟','♟','♟','♟','♟','♟'],
             [' ',' ',' ',' ',' ',' ',' ',' '],
@@ -28,7 +28,7 @@ class Board extends React.Component {
             [' ',' ',' ',' ',' ',' ',' ',' '],
             ['♙','♙','♙','♙','♙','♙','♙','♙'],
             ['♖','♘','♗','♔','♕','♗','♘','♖']
-          ]
+        ];
     }
     render() {
         return(
@@ -37,7 +37,12 @@ class Board extends React.Component {
             <div className="board-row" key={y}>
                 {
                 [...Array(8).keys()].map((x) => {
-                    return (Square({color: (x+y)%2 ? 'white' : 'black', value: this.pieces[y][x], key:x}))
+                    return (Square({
+                        color: (x+y)%2 ? 'white' : 'black', 
+                        value: this.state.pieces[y][x], 
+                        key:x
+                        })
+                    )
                 })
                 }
             </div>
