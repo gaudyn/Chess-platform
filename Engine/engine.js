@@ -1,13 +1,13 @@
-var BLACK = 'b'
-var WHITE = 'w'
+const BLACK = 'b'
+const WHITE = 'w'
 
-var EMPTY = -1
-var PAWN = 'p'
-var BISHOP = 'b'
-var KNIGHT = 'n'
-var ROOK = 'r'
-var QUEEN = 'q'
-var KING = 'k'
+const EMPTY = -1
+const PAWN = 'p'
+const BISHOP = 'b'
+const KNIGHT = 'n'
+const ROOK = 'r'
+const QUEEN = 'q'
+const KING = 'k'
 
 var SQUARES = {
     a8:   0, b8:   1, c8:   2, d8:   3, e8:   4, f8:   5, g8:   6, h8:   7,
@@ -24,6 +24,7 @@ var turn = WHITE;
 var board = new Array(64)
 var kings = {w: SQUARES.e1, b: SQUARES.e8} //positions of the kings, important for checking mates etc.
 var move_number = 1
+var checked = 0
 
 /**
  * Initializes the board and pieces on it. 
@@ -85,10 +86,24 @@ function put(piece, square) {
 }
 
 function check_move(from, to) { //oh boy, here we go
+    var type = board[SQUARES[from]].type    //type of the moving piece
+    var color = board[SQUARES[from]].color  //color of the moving piece
+    //0. check if it's the right turn
+    if (turn != color) {
+        console.log("It's the other guy's turn!")
+        return false
+    }
     //1. check if the 'to' square is empty or if it is a legal attack
+    if (board[SQUARES[to]].color === color) {
+        console.log("Trying to take your own piece")
+        return false
+    }
+
     //2. check if the piece's move is legal (for example if the bishop runs diagonally)
-    //3. check if the king is (still) checked
-    //4. check if the move is even on board :) (idk if this is necessary, maybe not)
+    //3. check if on path of the piece there is sth else
+
+    //4. check if the king is (still) checked
+    //5. check if the move is even on board :) (idk if this is necessary, maybe not)
 }
 
 function make_move(from, to) { //a lot TODO here
@@ -96,4 +111,8 @@ function make_move(from, to) { //a lot TODO here
     //but i'm not sure about localization of that in code
     var piece = remove(from)
     put(piece, to)
+    if (turn === WHITE)
+        turn = BLACK
+    else
+        turn = WHITE
 }
