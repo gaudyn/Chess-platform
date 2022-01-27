@@ -1,21 +1,11 @@
 function Square(props) {
-    if(props.color === 'white'){
-        return (
-            <div className="square" 
-            style={{backgroundColor: 'white'}}
-            onClick={props.onClick}>
-            <span>{props.value}</span>
-            </div>
-        );
-    } else {
-        return (
-            <div className="square" 
-            style={{backgroundColor: 'gray'}}
-            onClick={props.onClick}>
-            <span>{props.value}</span>
-            </div>
-        );
-    }
+    return (
+        <div className="square" 
+        style={{backgroundColor: props.color}}
+        onClick={props.onClick}>
+        <span>{props.value}</span>
+        </div>
+    );
 }
 
 class Board extends React.Component {
@@ -70,7 +60,7 @@ class Board extends React.Component {
                 {
                 [...Array(8).keys()].map((x) => {
                     return (<Square
-                        color= {(x+y)%2 ? 'white' : 'black'} 
+                        color= {(x+y)%2 ? 'white' : 'gray'} 
                         value={this.state.pieces[y][x]} 
                         key={`Square ${y}, ${x}`}
                         onClick={() => this.handleClick(x,y)}
