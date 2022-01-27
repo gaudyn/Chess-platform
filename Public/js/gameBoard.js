@@ -1,15 +1,17 @@
 function Square(props) {
     if(props.color === 'white'){
         return (
-            <div className="square" style={{
-            backgroundColor: 'white'}}>
+            <div className="square" 
+            style={{backgroundColor: 'white'}}
+            onClick={props.onClick}>
             <span>{props.value}</span>
             </div>
         );
     } else {
         return (
-            <div className="square" style={{
-            backgroundColor: 'gray'}}>
+            <div className="square" 
+            style={{backgroundColor: 'gray'}}
+            onClick={props.onClick}>
             <span>{props.value}</span>
             </div>
         );
@@ -20,6 +22,7 @@ class Board extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            // TODO: Replace with actual game object array
             pieces : [
                 ['♜','♞','♝','♚','♛','♝','♞','♜'],
                 ['♟','♟','♟','♟','♟','♟','♟','♟'],
@@ -30,10 +33,35 @@ class Board extends React.Component {
                 ['♙','♙','♙','♙','♙','♙','♙','♙'],
                 ['♖','♘','♗','♔','♕','♗','♘','♖']
             ],
-            toSquare: null,
             fromSquare: null
         }
     }
+
+    handleClick(x,y) {
+        const squares = this.state.pieces.slice();
+        if (!this.state.fromSquare) {
+            // Clicked first square
+            this.setState({
+                pieces: squares,
+                fromSquare: [x,y]
+            });
+        } else if (this.state.fromSquare[0] == x && this.state.fromSquare[1] == y) {
+            // Undo clicking first square
+            this.setState({
+                pieces: squares,
+                fromSquare: null
+            });
+        } else {
+            const fromSquare = this.state.fromSquare.slice();
+            // Make move
+            this.setState({
+                pieces: squares,
+                fromSquare: fromSquare
+            });
+        }
+        console.log("From:" + this.state.fromSquare + " to: " + this.state.toSquare);
+    }
+
     render() {
         return(
         [...Array(8).keys()].map((y) => {
@@ -45,6 +73,7 @@ class Board extends React.Component {
                         color= {(x+y)%2 ? 'white' : 'black'} 
                         value={this.state.pieces[y][x]} 
                         key={`Square ${y}, ${x}`}
+                        onClick={() => this.handleClick(x,y)}
                         />
                     );
                 })
