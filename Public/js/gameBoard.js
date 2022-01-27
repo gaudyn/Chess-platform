@@ -43,13 +43,29 @@ class Board extends React.Component {
             });
         } else {
             const fromSquare = this.state.fromSquare.slice();
+            console.log("From:" + fromSquare + " to: " + [x,y]);
             // Make move
             this.setState({
                 pieces: squares,
-                fromSquare: fromSquare
+                fromSquare: null
             });
         }
-        console.log("From:" + this.state.fromSquare + " to: " + this.state.toSquare);
+        
+    }
+
+    renderSquare(x,y) {
+        var color = (x+y)%2 ? 'white' : 'gray';
+        if(this.state.fromSquare && this.state.fromSquare[0] == x && this.state.fromSquare[1] == y) {
+            color = 'green'
+        }
+
+        return (<Square
+            color= {color} 
+            value={this.state.pieces[y][x]} 
+            key={`Square ${y}, ${x}`}
+            onClick={() => this.handleClick(x,y)}
+            />
+        );
     }
 
     render() {
@@ -59,13 +75,7 @@ class Board extends React.Component {
             <div className="board-row" key={`Row ${y}`}>
                 {
                 [...Array(8).keys()].map((x) => {
-                    return (<Square
-                        color= {(x+y)%2 ? 'white' : 'gray'} 
-                        value={this.state.pieces[y][x]} 
-                        key={`Square ${y}, ${x}`}
-                        onClick={() => this.handleClick(x,y)}
-                        />
-                    );
+                    return this.renderSquare(x,y);
                 })
                 }
             </div>
