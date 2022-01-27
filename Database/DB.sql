@@ -1,7 +1,7 @@
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(30) NOT NULL UNIQUE,
-    password VARCHAR(128),
+    password VARCHAR(60),
     last_online TIMESTAMP DEFAULT now()
 );
 
