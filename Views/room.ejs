@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serwis szachowy - pokój <%= locals.roomId%></title>
+    <link rel="stylesheet" href="/css/gameBoard.css">
 
     <script>let roomId = <%= locals.roomId%>; </script>
 
@@ -18,7 +19,7 @@
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
     <!--Room components-->
-    <script src="/js/gameBoard.js"></script>
+    <script type="text/babel" src="/js/gameBoard.js"></script>
 </head>
 <body>
     
