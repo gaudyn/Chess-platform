@@ -29,7 +29,10 @@ class Board extends React.Component {
                 [' ',' ',' ',' ',' ',' ',' ',' '],
                 ['♙','♙','♙','♙','♙','♙','♙','♙'],
                 ['♖','♘','♗','♔','♕','♗','♘','♖']
-        ];
+            ],
+            toSquare: null,
+            fromSquare: null
+        }
     }
     render() {
         return(
