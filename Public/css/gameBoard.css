@@ -1,0 +1,25 @@
+.board-row:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.square {
+    background: #fff;
+    border: 1px solid #999;
+    float: left;
+    font-size: 70px;
+    font-weight: bold;
+    line-height: 80px;
+    height: 70px;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    text-align: center;
+    width: 70px;
+}
+
+.game {
+    display: flex;
+    flex-direction: row;
+}
