@@ -5,9 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serwis szachowy - pokój <%= locals.roomId%></title>
+
     <script>let roomId = <%= locals.roomId%>; </script>
+
+    <!--Socket communication-->
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/roomScript.js"></script>
+
+    <!--React-->
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!--Room components-->
+    <script src="/js/gameBoard.js"></script>
 </head>
 <body>
     
@@ -28,6 +39,7 @@
             </tr>
         </table>
     </div>
+    <div id="gameBoard"></div>
     <div>
         <table id="moves">
             <tr>
