@@ -3,7 +3,7 @@ function Square(props) {
         <div className="square" 
         style={{backgroundColor: props.color}}
         onClick={props.onClick}>
-        <span>{props.value}</span>
+        {props.value}
         </div>
     );
 }
