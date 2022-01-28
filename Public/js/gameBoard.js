@@ -47,7 +47,7 @@ class Board extends React.Component {
             squares[y][x] = squares[y1][x1];
             squares[y1][x1] = ' ';
             console.log("From:" + [x1,y1] + " to: " + [x,y]);
-            
+
             // Make move
             this.setState({
                 pieces: squares,
@@ -57,10 +57,27 @@ class Board extends React.Component {
         
     }
 
+    isSelected(x,y) {
+        return (this.state.fromSquare 
+            && this.state.fromSquare[0] == x 
+            && this.state.fromSquare[1] == y);
+    }
+
+    isMovePossible(x,y) {
+        if (!this.state.fromSquare) return false;
+        // TODO: Check in engine if the move is possible
+        return (this.state.fromSquare[0] == x || this.state.fromSquare[1] == y);
+    }
+
     renderSquare(x,y) {
-        var color = (x+y)%2 ? 'white' : 'gray';
-        if(this.state.fromSquare && this.state.fromSquare[0] == x && this.state.fromSquare[1] == y) {
-            color = 'green'
+        var isLight = (x+y)%2;
+        var color;
+        if (this.isSelected(x,y)) {
+            color = isLight ? '#4CB22E' : '#306F1D';
+        } else if (this.isMovePossible(x,y)) {
+            color = isLight ? '#2EB288' : '#1D6F55';
+        } else {
+            color = isLight ? '#F5F4E7' : '#5C5B57';
         }
 
         return (<Square
