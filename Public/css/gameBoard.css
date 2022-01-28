@@ -7,9 +7,9 @@
 .square {
     background: #fff;
     float: left;
+    font-family: 'Arial Unicode MS';
     font-size: 70px;
-    font-weight: bold;
-    line-height: 80px;
+    line-height: 60px;
     height: 70px;
     margin-right: -1px;
     margin-top: -1px;
