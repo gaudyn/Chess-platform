@@ -112,19 +112,107 @@ class Board extends React.Component {
     }
 }
 
+class GameInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selection: 'chat'
+        }
+    }
+
+    renderChild() {
+        switch (this.state.selection) {
+            case 'chat':
+                return(<Chat/>);
+            case 'connected':
+                return(<ConnectedUsers/>);
+            case 'moves':
+                return(<GameMoves/>);
+            default:
+                return('Tu jest domyślne');
+        }
+    }
+
+    render() {
+        return(
+            <div>
+                <div className='infoButtons'>
+                    <div>Rozmowa</div>
+                    <div>Przebieg</div>
+                    <div>Obecni</div>
+                    <div>Ustawienia</div>
+                </div>
+                {this.renderChild(this.state.selection)}
+            </div>
+        )
+    }
+}
+
+class GameMoves extends React.Component {
+    render() {
+        return(
+            <table>
+            <thead>
+                <tr>
+                    <td>Ruch</td>
+                    <td>Biały</td>
+                    <td>Czarny</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>We5</td>
+                    <td>Hh6</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>e7</td>
+                    <td>Kh3</td>
+                </tr>
+            </tbody>
+                
+            </table>
+        )
+    }
+}
+
+class Chat extends React.Component {
+    render() {
+        return("Czat");
+    }
+}
+
+class ConnectedUsers extends React.Component {
+    render() {
+        return("Połączeni użytkownicy");
+    }
+}
+
+class PlayerInfo extends React.Component {
+    render() {
+        return("Grający użytkownicy");
+    }
+}
+
 class GameStatus extends React.Component {
     render() {
-        return('Hello I am a test')
+        return(
+            <div>
+                <PlayerInfo/>
+                <GameInfo/>
+            </div>
+        );
     }
 }
 
 class Game extends React.Component {
     render() {
         return(
-            <div className="game" style={{display: 'flex', flexDirection: 'row'}}>
-            <div style={{border: '2px solid black'}}>
-                <Board/>
-            </div>
+            <div className="game">
+                <div className="board-border">
+                    <Board/>
+                </div>
                 <GameStatus/>
             </div>
         )

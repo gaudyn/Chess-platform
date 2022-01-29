@@ -20,3 +20,12 @@
    -moz-user-select: none;
    -ms-user-select: none; 
 }
+
+.game, .infoButtons {
+    display: flex;
+    flex-direction: row;
+}
+
+.board-border {
+    border: 2px solid black;
+}
