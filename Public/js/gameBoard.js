@@ -133,14 +133,28 @@ class GameInfo extends React.Component {
         }
     }
 
+    setSelection(sel) {
+        this.setState({selection: sel});
+    }
+
+    renderInfoButton(sel, title) {
+        return (
+            <div className='info-button'
+                onClick={ () => {this.setSelection(sel)}}
+                style={{backgroundColor: this.state.selection == sel ? 'gray' : 'lightgray'}}>
+                {title}
+            </div>
+        )
+    }
+
     render() {
         return(
             <div>
-                <div className='infoButtons'>
-                    <div>Rozmowa</div>
-                    <div>Przebieg</div>
-                    <div>Obecni</div>
-                    <div>Ustawienia</div>
+                <div className='info-buttons'>
+                    {this.renderInfoButton('chat', 'Rozmowa')}
+                    {this.renderInfoButton('moves', 'Przebieg')}
+                    {this.renderInfoButton('connected', 'Obecni')}
+                    {this.renderInfoButton('settings', 'Ustawienia')}
                 </div>
                 {this.renderChild(this.state.selection)}
             </div>
@@ -239,7 +253,7 @@ class PlayerInfo extends React.Component {
 class GameStatus extends React.Component {
     render() {
         return(
-            <div>
+            <div className="game-status">
                 <PlayerInfo/>
                 <GameInfo/>
             </div>
