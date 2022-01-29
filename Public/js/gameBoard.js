@@ -35,13 +35,13 @@ class Board extends React.Component {
                 pieces: squares,
                 fromSquare: [x,y]
             });
-        } else if (this.state.fromSquare[0] == x && this.state.fromSquare[1] == y) {
+        } else if (this.isSelected(x,y)) {
             // Undo clicking first square
             this.setState({
                 pieces: squares,
                 fromSquare: null
             });
-        } else {
+        } else if (this.state.fromSquare){
             // Move piece to second square
             const [x1, y1] = this.state.fromSquare.slice();
             squares[y][x] = squares[y1][x1];
