@@ -210,7 +210,7 @@ class PlayerInfo extends React.Component {
             return(
                 <div>
                     {username}
-                    <button>X</button>
+                    <button style={{marginLeft: '5px'}}>X</button>
                 </div>
             )
         } else {
@@ -243,7 +243,7 @@ class PlayerInfo extends React.Component {
                 </div>
                 <hr/>
                 <div className="player-buttons">
-                    <button>Rezygnuję</button>
+                    <button style={{marginRight: '5px'}}>Rezygnuję</button>
                     <button>Remis</button>
                 </div>
             </div>);

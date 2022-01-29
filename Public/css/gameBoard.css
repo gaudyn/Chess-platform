@@ -28,6 +28,7 @@
 
 .game-status {
     padding: 10px;
+    width: 45%;
 }
 
 .board-border {
@@ -54,10 +55,12 @@
     padding: 5px;
     text-align: center;
     width: 100%;
+    white-space:nowrap;
 }
 
 .info-button {
     border: 1px solid black;
+    margin-left: -1px;
     padding: 5px;
     background-color: lightgray;
 }
