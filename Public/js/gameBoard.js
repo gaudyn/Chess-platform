@@ -190,8 +190,49 @@ class ConnectedUsers extends React.Component {
 }
 
 class PlayerInfo extends React.Component {
+
+    renderPlayerName(username) {
+        if(username) {
+            return(
+                <div>
+                    {username}
+                    <button>X</button>
+                </div>
+            )
+        } else {
+            return(
+                <button>Zajmij</button>
+            )
+        }
+    }
+
+    renderPlayerSeat(color, username){
+        return(
+            <div class="player-seat">
+                <div class="player-color" style={{backgroundColor: color}}></div>
+                <div class="player-name">
+                    {this.renderPlayerName(username)}
+                </div>
+            </div>
+        )
+    }
+
     render() {
-        return("Grający użytkownicy");
+        return(
+            <div className="player-info">
+                Pokój {roomId}
+                <hr/>
+                <div className="player-seats">
+                    {this.renderPlayerSeat('white')}
+                    <div style={{width: '10px'}}></div>
+                    {this.renderPlayerSeat('black', 'gracz2')}
+                </div>
+                <hr/>
+                <div className="player-buttons">
+                    <button>Rezygnuję</button>
+                    <button>Remis</button>
+                </div>
+            </div>);
     }
 }
 

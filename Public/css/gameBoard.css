@@ -21,11 +21,34 @@
    -ms-user-select: none; 
 }
 
-.game, .infoButtons {
+.game, .infoButtons, .player-seats{
     display: flex;
     flex-direction: row;
 }
 
 .board-border {
     border: 2px solid black;
+}
+
+.player-info {
+    height: 50%;
+    width: 100%;
+    padding: 10px;
+}
+
+.player-seat{
+    width:50%;
+    float: left;
+    border: 1px solid black;
+}
+
+.player-color{
+    height: 10px;
+    border-bottom: 1px solid black;
+}
+
+.player-name {
+    padding: 5px;
+    text-align: center;
+    width: 100%;
 }
