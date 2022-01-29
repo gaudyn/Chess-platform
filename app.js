@@ -101,7 +101,7 @@ app.post('/register', (req, res) => {
         registerPassword != false &&
         registerUsername != false) {
         try {
-            //registerAccount(registerUsername, registerPassword) 
+            users.createAccout(registerUsername, registerPassword) 
             res.render( 'register', { message : "Account created succesfully!" } );
         }
         catch(err) {
@@ -120,13 +120,15 @@ app.post('/noAccount', (req, res) => {
    
     if (noAccUsername != false) {
         try {
-            // createAnonymousAccount(noAccUsername)
+            console.log(noAccUsername);
+            //var str = toString(noAccUsername);
+            users.createAnonymousAccount(noAccUsername)
             var cookieValue = JSON.stringify({ 
                 username: noAccUsername,
                 userType: 'noAccount'
             });
     
-            res.cookie('cookie', cookieValue, {signed: true});
+            res.cookie('cookie', cookieValue, {signed: true, maxAge: 60*60*24});
             res.redirect( './waitroom');
         }
         catch(err) {
