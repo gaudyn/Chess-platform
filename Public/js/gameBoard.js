@@ -81,7 +81,7 @@ class Board extends React.Component {
         } else if (this.isMovePossible(x,y)) {
             color = isLight ? '#2EB288' : '#1D6F55';
         } else {
-            color = isLight ? '#F5F4E7' : '#5C5B57';
+            color = isLight ? '#F5F4E7' : '#7C7B77';
             cursor = this.state.pieces[y][x] != ' ' ? 'pointer' : 'auto';
         }
 
