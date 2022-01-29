@@ -41,7 +41,7 @@ class Board extends React.Component {
                 pieces: squares,
                 fromSquare: null
             });
-        } else if (this.state.fromSquare){
+        } else if (this.state.fromSquare && this.isMovePossible(x,y)){
             // Move piece to second square
             const [x1, y1] = this.state.fromSquare.slice();
             squares[y][x] = squares[y1][x1];
