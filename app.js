@@ -71,13 +71,12 @@ app.get('/logout', (req, res) => {
 /**
  * Handles login request
  */
-app.post('/login', (req, res) => {
+app.post('/login', async function(req, res){
     var loginUsername = req.body.UsernameInput;
     var loginPassword = req.body.PasswordInput;
 
-    if (loginPassword == '123' && loginUsername != false) {
-    //if (loginUsername != false && users.logIn(loginUsername, loginPassword)) { 
-
+    //if (loginPassword == '123' && loginUsername != false) {
+    if (loginUsername != false && (await users.logIn(loginUsername, loginPassword))) {
         var cookieValue = JSON.stringify({ 
             username: loginUsername,
             userType: 'loggedIn'
@@ -92,7 +91,7 @@ app.post('/login', (req, res) => {
 /**
  * Handles register request
 */
-app.post('/register', (req, res) => {
+app.post('/register', async function(req, res){
     var registerUsername = req.body.UsernameInput;
     var registerPassword = req.body.PasswordInput;
     var registerPasswordConfirmation = req.body.PasswordConfirmationInput;
@@ -101,11 +100,11 @@ app.post('/register', (req, res) => {
         registerPassword != false &&
         registerUsername != false) {
         try {
-            users.createAccout(registerUsername, registerPassword) 
+            await users.createAccout(registerUsername, registerPassword);
             res.render( 'register', { message : "Account created succesfully!" } );
         }
         catch(err) {
-            res.render( 'register', { message : err.message } );
+            res.render( 'register', { message : "Username taken!" } );
         }
     } else {
         res.render( 'register', { message : "Invalid input" } );
@@ -115,14 +114,12 @@ app.post('/register', (req, res) => {
 /**
  * Handles anonymous user request
 */
-app.post('/noAccount', (req, res) => {
+app.post('/noAccount', async function(req, res){
     var noAccUsername = req.body.UsernameInput;
    
     if (noAccUsername != false) {
         try {
-            console.log(noAccUsername);
-            //var str = toString(noAccUsername);
-            users.createAnonymousAccount(noAccUsername)
+            await users.createAnonymousAccount(noAccUsername)
             var cookieValue = JSON.stringify({ 
                 username: noAccUsername,
                 userType: 'noAccount'
@@ -132,7 +129,7 @@ app.post('/noAccount', (req, res) => {
             res.redirect( './waitroom');
         }
         catch(err) {
-            res.render( 'noAccount', { message : err.message } );
+            res.render( 'noAccount', { message : "Username taken!" } );
         }
     } else {
         res.render( 'noAccount', { message : "Invalid Input" } );
