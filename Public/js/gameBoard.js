@@ -1,7 +1,10 @@
 function Square(props) {
     return (
         <div className="square" 
-        style={{backgroundColor: props.color}}
+        style={{
+            backgroundColor: props.color,
+            cursor: props.cursor
+            }}
         onClick={props.onClick}>
         {props.value}
         </div>
@@ -71,6 +74,7 @@ class Board extends React.Component {
 
     renderSquare(x,y) {
         var isLight = (x+y)%2;
+        var cursor = 'pointer';
         var color;
         if (this.isSelected(x,y)) {
             color = isLight ? '#4CB22E' : '#306F1D';
@@ -78,13 +82,15 @@ class Board extends React.Component {
             color = isLight ? '#2EB288' : '#1D6F55';
         } else {
             color = isLight ? '#F5F4E7' : '#5C5B57';
+            cursor = this.state.pieces[y][x] != ' ' ? 'pointer' : 'auto';
         }
 
         return (<Square
-            color= {color} 
-            value={this.state.pieces[y][x]} 
-            key={`Square ${y}, ${x}`}
-            onClick={() => this.handleClick(x,y)}
+            color = {color} 
+            value = {this.state.pieces[y][x]} 
+            cursor = {cursor}
+            key = {`Square ${y}, ${x}`}
+            onClick = {() => this.handleClick(x,y)}
             />
         );
     }
