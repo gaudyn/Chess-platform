@@ -112,9 +112,28 @@ class Board extends React.Component {
     }
 }
 
+class GameStatus extends React.Component {
+    render() {
+        return('Hello I am a test')
+    }
+}
+
+class Game extends React.Component {
+    render() {
+        return(
+            <div className="game" style={{display: 'flex', flexDirection: 'row'}}>
+            <div style={{border: '2px solid black'}}>
+                <Board/>
+            </div>
+                <GameStatus/>
+            </div>
+        )
+    }
+}
+
 // ============
 
 ReactDOM.render(
-    <Board />,
+    <Game />,
     document.getElementById('gameboard')
 );
