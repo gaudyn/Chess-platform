@@ -7,11 +7,12 @@
     <title>Serwis szachowy - pokój <%= locals.roomId%></title>
     <link rel="stylesheet" href="/css/gameBoard.css">
 
-    <script>let roomId = <%= locals.roomId%>; </script>
+    <script>let roomId = <%= locals.roomId%></script>
 
     <!--Socket communication-->
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/roomScript.js"></script>
+    <script>let client =  new ConnectionHandler(<%= locals.roomId%>)</script>
 
     <!--React-->
     <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
