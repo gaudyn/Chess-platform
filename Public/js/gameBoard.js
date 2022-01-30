@@ -201,17 +201,13 @@ class PlayerInfo extends React.Component {
             whitePlayer: undefined,
             blackPlayer: undefined
         }
-        console.log(client);
-        console.log(this);
 
         let self = this;
         client.updateWhitePlayer = (username) => {
-            console.log(self);
             self.setState(prevState => ({
                 ...prevState,
                 whitePlayer: username
             }))
-            console.log(self.state);
         }
         client.updateBlackPlayer = (username) => {
             self.setState(prevState => ({
@@ -244,7 +240,6 @@ class PlayerInfo extends React.Component {
     }
 
     renderPlayerSeat(color, username){
-        console.log(`Render player seat ${color}, ${username}`)
         return(
             <div className="player-seat">
                 <div className="player-color" style={{backgroundColor: color}}></div>
@@ -255,10 +250,20 @@ class PlayerInfo extends React.Component {
         )
     }
 
+    roomMessage() {
+        if(this.props.canJoin){
+            return 'Waiting for players';
+        } else if(this.props.isCounting) {
+            return 'The game is about to start'
+        } else {
+            return 'The game has started'
+        }
+    }
+
     render() {
         return(
             <div className="player-info">
-                Room {roomId}
+                Room {roomId} - {this.roomMessage()}
                 <hr/>
                 <div className="player-seats">
                     {this.renderPlayerSeat('white', this.state.whitePlayer)}
@@ -278,7 +283,8 @@ class GameStatus extends React.Component {
     render() {
         return(
             <div className="game-status">
-                <PlayerInfo/>
+                <PlayerInfo isCounting={this.props.isCounting}
+                    canJoin={this.props.canJoin}/>
                 <hr/>
                 <GameInfo/>
             </div>
@@ -287,13 +293,30 @@ class GameStatus extends React.Component {
 }
 
 class Game extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            gameState: 'waiting',
+            canPlay: false
+        }
+
+        var self = this;
+        client.gameStateChanged = (state) => {
+            self.setState(prevState => ({
+                gameState: state,
+                canPlay: prevState.gameState == "countdown" && state == 'playing'
+            }))
+        }
+    }
     render() {
         return(
             <div className="game">
                 <div className="board-border">
-                    <Board/>
+                    <Board isActive={this.state.canPlay}/>
                 </div>
-                <GameStatus/>
+                <GameStatus isCounting={this.state.gameState == 'countdown'}
+                    canJoin={this.state.gameState == 'waiting'}
+                />
             </div>
         )
     }
@@ -305,4 +328,3 @@ ReactDOM.render(
     <Game />,
     document.getElementById('gameboard')
 );
-console.log(client.updateWhitePlayer);
