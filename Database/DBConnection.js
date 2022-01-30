@@ -59,7 +59,7 @@ async function checkUser(username, password) {
     try {
         const res = await db.query('SELECT * FROM users WHERE username = $1', [username]);
         await db.end();
-        if (res.rows[0].password) {
+        if (res.rowCount == 1 && res.rows[0].password) {
             const match = await bcrypt.compare(password, res.rows[0].password)
             if(match) return true;
         }
