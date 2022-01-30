@@ -207,13 +207,11 @@ class PlayerInfo extends React.Component {
             self.setState({
                 whitePlayer: username
             })
-            console.log(username);
         }
         client.updateBlackPlayer = (username) => {
             self.setState({
                 blackPlayer: username
             })
-            console.log(username);
         }
     }
 
@@ -261,7 +259,6 @@ class PlayerInfo extends React.Component {
     }
 
     render() {
-        console.log(this.state);
         return(
             <div className="player-info">
                 Room {roomId} - {this.roomMessage()}
@@ -303,17 +300,19 @@ class Game extends React.Component {
 
         var self = this;
         client.gameStateChanged = (state) => {
-            self.setState(prevState => ({
+            
+            self.setState({
                 gameState: state,
-                canPlay: prevState.gameState == "countdown" && state == 'playing'
-            }))
+                canPlay: this.state.gameState == "countdown" && state == 'playing'
+            })
         }
     }
     render() {
+        console.log(this.state.gameState);
         return(
             <div className="game">
-                <div className="board-border">
-                    <Board isActive={this.state.canPlay}/>
+                <div className="board-border" style={{pointerEvents: this.state.canPlay ? 'auto' : 'none'}}>
+                    <Board/>
                 </div>
                 <GameStatus isCounting={this.state.gameState == 'countdown'}
                     canJoin={this.state.gameState == 'waiting'}
