@@ -57,14 +57,14 @@ async function registerAccount(username, password) {
 async function checkUser(username, password) {
     const db = await getClient();
     try {
-        const res = await db.query('SELECT * FROM users WHERE username = $1', [username, password]);
-        await db.end;
+        const res = await db.query('SELECT * FROM users WHERE username = $1', [username]);
+        await db.end();
         if (res.rows[0].password) {
             const match = await bcrypt.compare(password, res.rows[0].password)
             if(match) return true;
         }
     } catch(err) {
-        await db.end;
+        await db.end();
         return false;
     }
     return false;
@@ -162,7 +162,7 @@ async function finishGame(gameId) {
 exports.users = {
     createAnonymousAccount: createAnonymousAccount,
     createAccout: registerAccount,
-    logIn: isPasswordCorrect
+    logIn: checkUser
 }
 
 exports.games = {

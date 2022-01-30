@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serwis szachowy - wejście jako anonimowy użytkownik</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+
+</head>
+
+<body class=maintext style="background-color:rgb(204, 178, 138);">
+
+    <h1>Welcome to Chess Platform!</h1>
+
+
+    <form method="POST">
+        <div id="noAcc">
+            <div>
+                If you want to contiunue without an account, simply choose your username.
+            </div>
+            <br />
+            <div>
+                <label>Choose your username:</label>
+                <input type='text' name='UsernameInput' />
+            </div>
+            <div>
+                <button id="noAccButton">Continue</button>
+            </div>
+    
+            <% if ( locals.message ) { %>
+                <div class='message'>
+                    <%= locals.message %>
+                </div>
+            <% } %>
+        </div>
+    </form>
+  
+    <a href="./">Back</a>
+
+</body>
+
+</html>
