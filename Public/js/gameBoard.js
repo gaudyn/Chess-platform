@@ -279,6 +279,7 @@ class GameStatus extends React.Component {
         return(
             <div className="game-status">
                 <PlayerInfo/>
+                <hr/>
                 <GameInfo/>
             </div>
         );
