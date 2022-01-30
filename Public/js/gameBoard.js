@@ -205,27 +205,61 @@ class ConnectedUsers extends React.Component {
 
 class PlayerInfo extends React.Component {
 
-    renderPlayerName(username) {
+    constructor(props) {
+        super(props);
+        this.state = {
+            whitePlayer: undefined,
+            blackPlayer: undefined
+        }
+        console.log(client);
+        console.log(this);
+
+        let self = this;
+        client.updateWhitePlayer = (username) => {
+            console.log(self);
+            self.setState(prevState => ({
+                ...prevState,
+                whitePlayer: username
+            }))
+            console.log(self.state);
+        }
+        client.updateBlackPlayer = (username) => {
+            self.setState(prevState => ({
+                ...prevState,
+                blackPlayer: username
+            }))
+        }
+    }
+
+    renderPlayerName(color, username) {
         if(username) {
             return(
                 <div>
                     {username}
-                    <button style={{marginLeft: '5px'}}>X</button>
+                    <button style={{marginLeft: '5px'}}
+                    onClick={() => {client.unclaimPlace()}}>X</button>
                 </div>
             )
         } else {
             return(
-                <button>Zajmij</button>
+                <button onClick={() => {
+                    if(color == 'white'){
+                        client.claimWhitePlace()
+                    } else {
+                        client.claimBlackPlace()
+                    }
+                }}>Zajmij</button>
             )
         }
     }
 
     renderPlayerSeat(color, username){
+        console.log(`Render player seat ${color}, ${username}`)
         return(
-            <div class="player-seat">
-                <div class="player-color" style={{backgroundColor: color}}></div>
-                <div class="player-name">
-                    {this.renderPlayerName(username)}
+            <div className="player-seat">
+                <div className="player-color" style={{backgroundColor: color}}></div>
+                <div className="player-name">
+                    {this.renderPlayerName(color, username)}
                 </div>
             </div>
         )
@@ -237,9 +271,9 @@ class PlayerInfo extends React.Component {
                 Pokój {roomId}
                 <hr/>
                 <div className="player-seats">
-                    {this.renderPlayerSeat('white')}
+                    {this.renderPlayerSeat('white', this.state.whitePlayer)}
                     <div style={{width: '10px'}}></div>
-                    {this.renderPlayerSeat('black', 'gracz2')}
+                    {this.renderPlayerSeat('black', this.state.blackPlayer)}
                 </div>
                 <hr/>
                 <div className="player-buttons">
@@ -280,3 +314,4 @@ ReactDOM.render(
     <Game />,
     document.getElementById('gameboard')
 );
+console.log(client.updateWhitePlayer);

@@ -11,33 +11,43 @@ var audience;
 
 
 function ConnectionHandler(username) {
-    this.socket = (function (){
+
+    this.updateWhitePlayer = function(username){return 0;}
+    this.updateBlackPlayer = function(username){return 0;}
+    this.updateAudience = function([audience]){return 0;}
+    this.removePlayer = function(username){return 0;}
+
+    this.createSocket = function (){
         var socket = io("http://localhost:3000", {autoConnect: false});
         socket.auth = {username, roomId};
         socket.connect();
 
         socket.on('fillRoom', (room) => {
             console.log('Fill room with '+ room.toString());
-            whitePlayer.innerHTML = room.whitePlayer;
-            blackPlayer.innerHTML = room.blackPlayer;
-            audience.innerHTML = room.audience.join(', ');
+            this.updateWhitePlayer(room.whitePlayer);
+            this.updateBlackPlayer(room.blackPlaye);
+            this.updateAudience(room.audience);
         })
 
         socket.on('claimPlace', (place, player) => {
             if (place == 'white'){
-                whitePlayer.innerHTML = player
+                console.log('Claimed white place')
+                this.updateWhitePlayer(player)
             } else if (place == 'black') {
-                blackPlayer.innerHTML = player
+                this.updateBlackPlayer(player)
             } 
         });
 
         socket.on('removePlayer', (username) => {
+            this.removePlayer(username);
+            /*
             let connectedUsers = audience.innerHTML.split(', ');
             let index = connectedUsers.indexOf(username);
             if (index >= 0){
                 connectedUsers.splice(index, 1);
             }
             audience.innerHTML = connectedUsers.join(', ');
+            */
         });
 
         socket.on('gameCanStart', () => {
@@ -57,7 +67,12 @@ function ConnectionHandler(username) {
         });
 
         return socket;
-    })();
+    }
+
+    this.connect = function(){
+        this.socket = this.createSocket();
+        console.log(this.socket);
+    }
     
     // Managing position in the room
     this.claimWhitePlace = function(){
@@ -83,7 +98,5 @@ function ConnectionHandler(username) {
 }
 
 window.addEventListener('load', (window, event) => {
-    whitePlayer = document.getElementById('whitePlayer');
-    blackPlayer = document.getElementById('blackPlayer');
-    audience = document.getElementById('audience');
+    client.connect();
 });
