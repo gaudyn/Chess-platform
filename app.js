@@ -196,14 +196,12 @@ io.on('connection', (socket) => {
         }
     });
     socket.on('confirmStart', () => {
-        if(countdown) {
-            let state = roomManager.confirmStartForRoom(username, roomId);
-            console.log(`Player ${username} has confimed start!`);
-            if (state == 'start') {
-                io.to(roomId).emit('gameStarted');
-                console.log(`Game in the room ${roomId} has started!`);
-                clearTimeout(countdown);
-            }
+        let state = roomManager.confirmStartForRoom(username, roomId);
+        console.log(`Player ${username} has confimed start!`);
+        if (state == 'start') {
+            io.to(roomId).emit('gameStarted');
+            console.log(`Game in the room ${roomId} has started!`);
+            if(countdown) clearTimeout(countdown);
         }
     });
 
