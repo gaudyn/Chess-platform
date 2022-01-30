@@ -135,16 +135,16 @@ app.post('/noAccount', async function(req, res){
     }
 });
 
-
-app.use((req, res, next) => {
-    res.render('404', { url: req.url });
-});
-
 //----------------------------------------------------------------
 
 app.get('/room/:roomId(\\d+)', (req, res) => {
     // Enable only numeric ids for rooms
-    res.render('room.ejs', {roomId: req.params.roomId});
+    var userCookie = JSON.parse(req.signedCookies.cookie);
+    res.render('room.ejs', {roomId: req.params.roomId, username: userCookie.username});
+});
+
+app.use((req, res, next) => {
+    res.render('404', { url: req.url });
 });
 
 var roomManager = new RoomManager();
