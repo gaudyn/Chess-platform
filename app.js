@@ -157,6 +157,7 @@ io.on('connection', (socket) => {
     var room = roomManager.connectUserToRoom(username, roomId);
     
     socket.join(roomId);
+    console.log(`W pokoju ${roomId} są gracze ${roomManager.rooms[roomId].audience}`)
     io.to(roomId).emit('fillRoom', room);
 
     socket.on('disconnecting', (reason) => {
@@ -189,6 +190,7 @@ io.on('connection', (socket) => {
                 if(roomManager.isGameRunningInRoom(roomId)) return;
                 console.log(`Game in the room ${roomId} is cancelled!`);
                 roomManager.confirmStartForRoom(null, roomId);
+                io.to(roomId).emit('gameEnded');
                 io.to(roomId).emit('fillRoom', room);
             }, 10000);
         }
