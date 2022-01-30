@@ -160,7 +160,7 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('fillRoom', room);
 
     socket.on('disconnecting', (reason) => {
-        let connectedRooms = [...socket.rooms].filter(x => x != socket.id && x.search('\d+-players') > 0);
+        let connectedRooms = [...socket.rooms].filter(x => x != socket.id && x.search(/\d+-players/g)== -1);
         roomManager.disconnectUserFromRooms(username, connectedRooms);
         socket.to(connectedRooms).emit('removePlayer', username);
         console.log('Gracz '+username+' został odłączony');
