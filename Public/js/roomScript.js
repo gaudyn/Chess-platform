@@ -12,10 +12,13 @@ var audience;
 
 function ConnectionHandler(username) {
 
-    this.updateWhitePlayer = function(username){return 0;}
-    this.updateBlackPlayer = function(username){return 0;}
-    this.updateAudience = function([audience]){return 0;}
-    this.removePlayer = function(username){return 0;}
+    // Helper functions 
+    this.updateWhitePlayer = function(username){}
+    this.updateBlackPlayer = function(username){}
+    this.updateAudience = function([audience]){}
+    this.removePlayer = function(username){}
+    this.gameStateChanged = function(state){}
+    this.newMoveMade = function(move){}
 
     this.createSocket = function (){
         var socket = io("http://localhost:3000", {autoConnect: false});
@@ -31,7 +34,6 @@ function ConnectionHandler(username) {
 
         socket.on('claimPlace', (place, player) => {
             if (place == 'white'){
-                console.log('Claimed white place')
                 this.updateWhitePlayer(player)
             } else if (place == 'black') {
                 this.updateBlackPlayer(player)
@@ -40,35 +42,34 @@ function ConnectionHandler(username) {
 
         socket.on('removePlayer', (username) => {
             this.removePlayer(username);
-            /*
-            let connectedUsers = audience.innerHTML.split(', ');
-            let index = connectedUsers.indexOf(username);
-            if (index >= 0){
-                connectedUsers.splice(index, 1);
-            }
-            audience.innerHTML = connectedUsers.join(', ');
-            */
         });
 
         socket.on('gameCanStart', () => {
+            this.gameStateChanged('countdown');
             console.log('Zatwierdź grę '+username);
         });
 
         socket.on('gameStarted', () => {
+            this.gameStateChanged('playing');
             console.log('Gra rozpoczęta!');
         });
 
         socket.on('gameEnded', () => {
+            this.gameStateChanged('waiting')
             console.log('Gra zakończona');
         });
 
         socket.on('newMove', (move, player) => {
+            this.newMoveMade(move, player);
             console.log(`Nowy ruch ${move} wykonany przez ${player}!`);
         });
 
         return socket;
     }
 
+    /**
+     * Connect socket to server after setting helper funcitons.
+     */
     this.connect = function(){
         this.socket = this.createSocket();
         console.log(this.socket);
