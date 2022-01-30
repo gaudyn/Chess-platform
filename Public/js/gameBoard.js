@@ -113,17 +113,9 @@ class Board extends React.Component {
 }
 
 class GameInfo extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            selection: 'chat'
-        }
-    }
 
-    renderChild() {
-        switch (this.state.selection) {
-            case 'chat':
-                return(<Chat/>);
+    renderChild(child) {
+        switch (child) {
             case 'connected':
                 return(<ConnectedUsers/>);
             case 'moves':
@@ -133,30 +125,12 @@ class GameInfo extends React.Component {
         }
     }
 
-    setSelection(sel) {
-        this.setState({selection: sel});
-    }
-
-    renderInfoButton(sel, title) {
-        return (
-            <div className='info-button'
-                onClick={ () => {this.setSelection(sel)}}
-                style={{backgroundColor: this.state.selection == sel ? 'gray' : 'lightgray'}}>
-                {title}
-            </div>
-        )
-    }
-
     render() {
         return(
             <div>
-                <div className='info-buttons'>
-                    {this.renderInfoButton('chat', 'Rozmowa')}
-                    {this.renderInfoButton('moves', 'Przebieg')}
-                    {this.renderInfoButton('connected', 'Obecni')}
-                    {this.renderInfoButton('settings', 'Ustawienia')}
-                </div>
-                {this.renderChild(this.state.selection)}
+                {this.renderChild('connected')}
+                <hr/>
+                {this.renderChild('moves')}
             </div>
         )
     }
@@ -191,15 +165,32 @@ class GameMoves extends React.Component {
     }
 }
 
-class Chat extends React.Component {
-    render() {
-        return("Czat");
-    }
-}
-
 class ConnectedUsers extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            audience: []
+        }
+        
+        let self = this;
+        client.updateAudience = (players) => {
+            console.log('Gracze: '+players)
+            self.setState({
+                audience: players
+            })
+        }
+    }
     render() {
-        return("Połączeni użytkownicy");
+        return(
+            <div className="connected-users">
+                <header>Players watching:</header>
+                <ul>
+                    {this.state.audience.map((player) => {
+                        return(<li key={player}>{player}</li>);
+                    })}
+                </ul>
+            </div>
+        );
     }
 }
 
