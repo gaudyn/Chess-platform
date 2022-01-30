@@ -26,6 +26,8 @@ function Room(){
         if (index >= 0) {
             this.audience.splice(this.audience.indexOf(username), 1);
         }
+        if(username == this.whitePlayer) this.whitePlayer = undefined;
+        if(username == this.blackPlayer) this.blackPlayer = undefined;
     }
 
     /**
