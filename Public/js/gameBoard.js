@@ -204,16 +204,16 @@ class PlayerInfo extends React.Component {
 
         let self = this;
         client.updateWhitePlayer = (username) => {
-            self.setState(prevState => ({
-                ...prevState,
+            self.setState({
                 whitePlayer: username
-            }))
+            })
+            console.log(username);
         }
         client.updateBlackPlayer = (username) => {
-            self.setState(prevState => ({
-                ...prevState,
+            self.setState({
                 blackPlayer: username
-            }))
+            })
+            console.log(username);
         }
     }
 
@@ -261,6 +261,7 @@ class PlayerInfo extends React.Component {
     }
 
     render() {
+        console.log(this.state);
         return(
             <div className="player-info">
                 Room {roomId} - {this.roomMessage()}

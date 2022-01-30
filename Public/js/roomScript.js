@@ -26,9 +26,9 @@ function ConnectionHandler(username) {
         socket.connect();
 
         socket.on('fillRoom', (room) => {
-            console.log('Fill room with '+ room.toString());
+            console.log('Fill room with '+ JSON.stringify(room));
             this.updateWhitePlayer(room.whitePlayer);
-            this.updateBlackPlayer(room.blackPlaye);
+            this.updateBlackPlayer(room.blackPlayer);
             this.updateAudience(room.audience);
         })
 
