@@ -174,7 +174,6 @@ class ConnectedUsers extends React.Component {
         
         let self = this;
         client.updateAudience = (players) => {
-            console.log('Gracze: '+players)
             self.setState({
                 audience: players
             })
@@ -239,7 +238,7 @@ class PlayerInfo extends React.Component {
                     } else {
                         client.claimBlackPlace()
                     }
-                }}>Zajmij</button>
+                }}>Take</button>
             )
         }
     }
@@ -259,7 +258,7 @@ class PlayerInfo extends React.Component {
     render() {
         return(
             <div className="player-info">
-                Pokój {roomId}
+                Room {roomId}
                 <hr/>
                 <div className="player-seats">
                     {this.renderPlayerSeat('white', this.state.whitePlayer)}
@@ -268,8 +267,8 @@ class PlayerInfo extends React.Component {
                 </div>
                 <hr/>
                 <div className="player-buttons">
-                    <button style={{marginRight: '5px'}}>Rezygnuję</button>
-                    <button>Remis</button>
+                    <button style={{marginRight: '5px'}}>Surrender</button>
+                    <button>Tie</button>
                 </div>
             </div>);
     }
