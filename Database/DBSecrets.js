@@ -3,10 +3,10 @@ const { Client } = require('pg');
 // Do uzupełnienia 
 function client(){
     return new Client({
-        user: 'dawid2',
+        user: '',
         host: 'localhost',
-        database: 'szachy',
-        password: '1234', 
+        database: '',
+        password: '', 
         port: '5432'
     });
 } 
