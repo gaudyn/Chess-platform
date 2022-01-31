@@ -271,7 +271,10 @@ class PlayerInfo extends React.Component {
                 <hr/>
                 <div className="player-buttons">
                     <button style={{marginRight: '5px'}}>Surrender</button>
-                    <button>Tie</button>
+                    <button style={{marginRight: '5px'}}>Tie</button>
+                    {
+                        this.props.isCounting ? <button onClick={() => {client.confirmStart()}}>Confirm start</button> : null
+                    }
                 </div>
             </div>);
     }
