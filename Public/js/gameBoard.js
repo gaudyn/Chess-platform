@@ -196,12 +196,14 @@ class ConnectedUsers extends React.Component {
 class ConfirmButton extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {seconds: 10};
+        this.state = {
+            clicked: false,
+            seconds: 10
+        };
     }
 
     tick() {
-        console.log(`${this.state.seconds} remaining!`)
-        if(this.state.seconds == 0) {
+        if(this.state.seconds == 0 && !this.state.clicked) {
             client.unclaimPlace();
         }
         this.setState( state => ({
@@ -218,8 +220,15 @@ class ConfirmButton extends React.Component {
     }
 
     render() {
-        return(
-            <button onClick={() => client.confirmStart()}>Confirm start ({this.state.seconds})</button>
+        return(!this.state.clicked ?
+                <button onClick={() => {
+                    this.setState({clicked: true})
+                    client.confirmStart()}}>
+                Confirm start ({this.state.seconds})
+                </button> :
+                <button style={{backgroundColor: 'gray', cursorEvents: 'none'}}>
+                    Waiting ({this.state.seconds})
+                </button>
         )
     }
 }
