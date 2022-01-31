@@ -42,9 +42,17 @@ app.get('/waitroom', authorize, (req, res) => {
     // (ci, którzy nie podali żadnego loginu nie są wpuszczani przez authorize)
     var userCookie = JSON.parse(req.signedCookies.cookie);
     if (userCookie.userType == 'loggedIn') {
-        res.render('waitroom', { userTypeMessage : "loggedIn", usernameMessage: userCookie.username});
+        res.render('waitroom', { 
+            userTypeMessage : "loggedIn",
+            usernameMessage: userCookie.username,
+            roomsList: roomManager.getRooms()
+        });
     } else {
-        res.render('waitroom', { userTypeMessage : "noAccount", usernameMessage: userCookie.username});
+        res.render('waitroom', {
+            userTypeMessage : "noAccount",
+            usernameMessage: userCookie.username,
+            roomsList: roomManager.rooms
+        });
     }
 });
 
@@ -53,9 +61,15 @@ app.get('/room', authorize, (req, res) => {
     // (ci, którzy nie podali żadnego loginu nie są wpuszczani przez authorize)
     var userCookie = JSON.parse(req.signedCookies.cookie);
     if (userCookie.userType == 'loggedIn') {
-        res.render('room', { userTypeMessage : "loggedIn", usernameMessage: userCookie.username});
+        res.render('room', { 
+            userTypeMessage : "loggedIn", 
+            usernameMessage: userCookie.username,
+        });
     } else {
-        res.render('room', { userTypeMessage : "noAccount", usernameMessage: userCookie.username});
+        res.render('room', {
+            userTypeMessage : "noAccount", 
+            usernameMessage: userCookie.username,
+        });
     }
 });
 
@@ -137,15 +151,24 @@ app.post('/noAccount', async function(req, res){
 });
 
 
-app.use((req, res, next) => {
-    res.render('404', { url: req.url });
-});
+
 
 //----------------------------------------------------------------
 
-app.get('/room/:roomId(\\d+)', (req, res) => {
+app.get('/room/:roomId(\\d+)', authorize, (req, res) => {
     // Enable only numeric ids for rooms
-    res.render('room.ejs', {roomId: req.params.roomId});
+    var userCookie = JSON.parse(req.signedCookies.cookie);
+    if (userCookie.userType == 'loggedIn') {
+        res.render('room.ejs', {
+            roomId: req.params.roomId,
+            username: userCookie.username
+            });
+        }
+    //res.render('room.ejs', {roomId: req.params.roomId});
+});
+
+app.use((req, res, next) => {
+    res.render('404', { url: req.url });
 });
 
 var roomManager = new RoomManager();
