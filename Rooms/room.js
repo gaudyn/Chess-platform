@@ -75,9 +75,11 @@ function Room(){
      */
     this.unclaimPlace = function(username) {
         if (this.whitePlayer == username) {
+            this.endGame();
             this.whitePlayer = undefined;
         }
         if (this.blackPlayer == username) {
+            this.endGame();
             this.blackPlayer = undefined;
         }
         return {
