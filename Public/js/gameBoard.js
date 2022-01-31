@@ -40,6 +40,19 @@ class Board extends React.Component {
         client.turnGameboard = (isBlackPlaying) => {
             self.setState({isBlackPlaying: isBlackPlaying});
         }
+
+        client.newMoveMade = (move) => {
+            let squares = this.state.pieces.slice();
+            const [x1, y1] = move.from;
+            const [x, y] = move.to;
+            squares[y][x] = squares[y1][x1];
+            squares[y1][x1] = ' ';
+            console.log("From:" + [x1,y1] + " to: " + [x,y]);
+            // Make move
+            this.setState({
+                pieces: squares
+            });
+        }
     }
 
     handleClick(x,y) {
@@ -62,7 +75,7 @@ class Board extends React.Component {
             squares[y][x] = squares[y1][x1];
             squares[y1][x1] = ' ';
             console.log("From:" + [x1,y1] + " to: " + [x,y]);
-
+            client.makeMove({from: [x1, y1], to: [x,y]})
             // Make move
             this.setState({
                 pieces: squares,

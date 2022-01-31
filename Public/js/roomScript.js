@@ -64,7 +64,7 @@ function ConnectionHandler(username) {
         });
 
         socket.on('newMove', (move, player) => {
-            this.newMoveMade(move, player);
+            if(username != player) this.newMoveMade(move);
             console.log(`Nowy ruch ${move} wykonany przez ${player}!`);
         });
 
