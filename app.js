@@ -193,6 +193,8 @@ io.on('connection', (socket) => {
                 io.to(roomId).emit('gameEnded');
                 io.to(roomId).emit('fillRoom', room);
             }, 10000);
+        } else if(!roomManager.isGameRunningInRoom(roomId)){
+            io.to(roomId).emit('gameEnded');
         }
     });
     socket.on('confirmStart', () => {
