@@ -17,7 +17,7 @@ app.use(express.static(__dirname + '/Public'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser("To jest nasz sekret"));
-app.use(express.static('./static'));
+app.use(express.static(__dirname + '/Public'));
 
 //----------------------------------------
 
