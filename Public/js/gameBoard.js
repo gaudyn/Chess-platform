@@ -193,6 +193,37 @@ class ConnectedUsers extends React.Component {
     }
 }
 
+class ConfirmButton extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {seconds: 10};
+    }
+
+    tick() {
+        console.log(`${this.state.seconds} remaining!`)
+        if(this.state.seconds == 0) {
+            client.unclaimPlace();
+        }
+        this.setState( state => ({
+            seconds: state.seconds-1 > 0 ? state.seconds-1 : 0
+        }));
+    }
+
+    componentDidMount() {
+        this.interval = setInterval(() => this.tick(), 1000);
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.interval);
+    }
+
+    render() {
+        return(
+            <button onClick={() => client.confirmStart()}>Confirm start ({this.state.seconds})</button>
+        )
+    }
+}
+
 class PlayerInfo extends React.Component {
 
     constructor(props) {
@@ -273,7 +304,7 @@ class PlayerInfo extends React.Component {
                     <button style={{marginRight: '5px'}}>Surrender</button>
                     <button style={{marginRight: '5px'}}>Tie</button>
                     {
-                        this.props.isCounting ? <button onClick={() => {client.confirmStart()}}>Confirm start</button> : null
+                        this.props.isCounting ? <ConfirmButton/> : null
                     }
                 </div>
             </div>);
