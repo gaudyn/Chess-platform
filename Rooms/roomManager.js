@@ -30,6 +30,13 @@ function RoomManager() {
     }
 
     /**
+     * @returns {string[]} List of rooms currently connected
+     */
+    this.getRooms = function () {
+        return this.rooms
+    }
+
+    /**
      * Claims place for the user in the room.
      * @param {string} username User's username.
      * @param {string} roomId Room's id.
