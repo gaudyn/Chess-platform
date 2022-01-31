@@ -164,7 +164,12 @@ function Room(){
      */
     this.makeMove = function (username, move) {
         // TODO: Save the move in the database
-        if (move == 'end') return true;
+        if(username != this.whitePlayer && username != this.blackPlayer) return false;
+
+        if (move == 'end'){ 
+           this.gameStarted = false;
+            return true;
+        }
         return false;
     }
 }
