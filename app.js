@@ -148,6 +148,8 @@ app.use((req, res, next) => {
 });
 
 var roomManager = new RoomManager();
+/**@type {Object.<string, NodeJS.Timeout>} */
+var roomCountdowns = {};
 
 io.on('connection', (socket) => {
     var username = socket.handshake.auth.username;
@@ -167,9 +169,6 @@ io.on('connection', (socket) => {
         console.log('Gracz '+username+' został odłączony');
     });
 
-    /**@type {NodeJS.Timeout} */
-    var countdown;
-
     socket.on('claimPlace', (place) => {
         let players = roomManager.claimPlaceForUserInRoom(username, roomId, place);
 
@@ -177,6 +176,9 @@ io.on('connection', (socket) => {
             socket.join(`${roomId}-players`);
         } else {
             socket.leave(`${roomId}-players`);
+        }
+        if(players.shouldEndCountdown){
+            clearTimeout(roomCountdowns[roomId]);
         }
 
         io.to(roomId).emit('claimPlace', 'white', players.white);
@@ -186,7 +188,7 @@ io.on('connection', (socket) => {
             console.log(`Game in the room ${roomId} is about to start!`);
             io.to(`${roomId}-players`).emit('gameCanStart');
             // Countdown for players to start the game.
-            countdown = setTimeout( () => {
+            roomCountdowns[roomId] = setTimeout( () => {
                 if(roomManager.isGameRunningInRoom(roomId)) return;
                 console.log(`Game in the room ${roomId} is cancelled!`);
                 roomManager.confirmStartForRoom(null, roomId);
@@ -203,7 +205,7 @@ io.on('connection', (socket) => {
         if (state == 'start') {
             io.to(roomId).emit('gameStarted');
             console.log(`Game in the room ${roomId} has started!`);
-            if(countdown) clearTimeout(countdown);
+            if(roomCountdowns[roomId]) clearTimeout(roomCountdowns[roomId]);
         }
     });
 

@@ -71,20 +71,24 @@ function Room(){
     /**
      * Unclaims places claimed previously by the user.
      * @param {string} username User's username.
-     * @returns {{white: string, black: string}} Object containing players' usernames. `.white` contains the white player's username, `.black` contains the black player's username.
+     * @returns {{white: string, black: string, shouldEndCountdown: boolean}} Object containing players' usernames and whether countdown for players should end: `.white` contains the white player's username, `.black` contains the black player's username.
      */
     this.unclaimPlace = function(username) {
+        let shouldEndCountdown = false;
         if (this.whitePlayer == username) {
             this.endGame();
             this.whitePlayer = undefined;
+            shouldEndCountdown = true;
         }
         if (this.blackPlayer == username) {
             this.endGame();
             this.blackPlayer = undefined;
+            shouldEndCountdown = true;
         }
         return {
             white : this.whitePlayer,
-            black : this.blackPlayer
+            black : this.blackPlayer,
+            shouldEndCountdown
         };
     }
 
@@ -103,6 +107,8 @@ function Room(){
      */
     this.endGame = function(){
         this.gameStarted = false;
+        whiteConfirm = false;
+        blackConfirm = false;
         //TODO: Finish the game in the database
     }
 
