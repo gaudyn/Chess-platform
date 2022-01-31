@@ -137,7 +137,7 @@ app.post('/noAccount', async function(req, res){
 
 //----------------------------------------------------------------
 
-app.get('/room/:roomId(\\d+)', (req, res) => {
+app.get('/room/:roomId(\\d+)', authorize, (req, res) => {
     // Enable only numeric ids for rooms
     var userCookie = JSON.parse(req.signedCookies.cookie);
     res.render('room.ejs', {roomId: req.params.roomId, username: userCookie.username});
