@@ -15,6 +15,7 @@ function ConnectionHandler(username) {
     // Helper functions 
     this.updateWhitePlayer = function(username){}
     this.updateBlackPlayer = function(username){}
+    this.turnGameboard = function(shouldTurn){}
     this.updateAudience = function([audience]){}
     this.removePlayer = function(username){}
     this.gameStateChanged = function(state){}
@@ -37,7 +38,10 @@ function ConnectionHandler(username) {
                 this.updateWhitePlayer(player)
             } else if (place == 'black') {
                 this.updateBlackPlayer(player)
+                if(player == username) this.turnGameboard(true);
+                return;
             } 
+            if(player == username) this.turnGameboard(false);
         });
 
         socket.on('removePlayer', (username) => {
@@ -85,6 +89,7 @@ function ConnectionHandler(username) {
     }
 
     this.unclaimPlace = function(){
+        this.turnGameboard(false);
         this.socket.emit('claimPlace', 'watch');
     }
 

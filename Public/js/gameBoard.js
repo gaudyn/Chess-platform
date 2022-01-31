@@ -1,3 +1,7 @@
+/**
+ * Creates a square for the gameboard.
+ * @param {*} props `.color` - Square color, `.cursor` - Type of cursor for the square, `.value` - 
+ */
 function Square(props) {
     return (
         <div className="square" 
@@ -11,6 +15,9 @@ function Square(props) {
     );
 }
 
+/**
+ * Gameboard
+ */
 class Board extends React.Component {
     constructor(props) {
         super(props)
@@ -26,7 +33,12 @@ class Board extends React.Component {
                 ['♙','♙','♙','♙','♙','♙','♙','♙'],
                 ['♖','♘','♗','♔','♕','♗','♘','♖']
             ],
-            fromSquare: null
+            fromSquare: null,
+            isBlackPlaying: false
+        }
+        var self = this;
+        client.turnGameboard = (isBlackPlaying) => {
+            self.setState({isBlackPlaying: isBlackPlaying});
         }
     }
 
@@ -102,7 +114,7 @@ class Board extends React.Component {
             <div className="board-row" key={`Row ${y}`}>
                 {
                 [...Array(8).keys()].map((x) => {
-                    return this.renderSquare(x,y);
+                    return this.state.isBlackPlaying? this.renderSquare(7-x, 7-y) : this.renderSquare(x,y);
                 })
                 }
             </div>
