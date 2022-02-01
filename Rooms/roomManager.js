@@ -37,6 +37,48 @@ function RoomManager() {
     }
 
     /**
+     * Finds maximum roomId
+     * @returns {int} maximum roomId of rooms currently created 
+     */
+    this.maxRoomNumber = function () {
+        var roomIdsList = Object.keys(this.rooms);
+        roomIdsList.sort();
+        roomIdsList.reverse();
+        var maxRoomNumber;
+        if(roomIdsList.length > 0) {
+            var maxRoomNumber = roomIdsList[0];
+        }
+        else {
+            var maxRoomNumber = 0;
+        }
+        return parseInt(maxRoomNumber);
+    }
+
+    /**
+     * Checks if a room is present in the rooms list
+     * @param {int} roomId Room's id.
+     * @returns {boolean} True if room is present in the rooms list, false otherwise
+     */
+    this.isRoomCreated = function (roomId) {
+        if(roomId in this.rooms) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    /**
+     * Adds a new room with roomId to this.rooms
+     * @param {int} roomId Room's id.
+     */
+    this.createNewRoom = function (roomId) {
+        if (!this.rooms[roomId]) {
+            this.rooms[roomId] = new Room();
+        } else {
+            console.log("This room is already created");
+        }
+    }
+
+    /**
      * Claims place for the user in the room.
      * @param {string} username User's username.
      * @param {string} roomId Room's id.
