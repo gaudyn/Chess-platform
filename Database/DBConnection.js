@@ -59,7 +59,7 @@ async function checkUser(username, password) {
     try {
         const res = await db.query('SELECT * FROM users WHERE username = $1', [username]);
         await db.end();
-        if (res.rows[0].password) {
+        if (res.rowCount == 1 && res.rows[0].password) {
             const match = await bcrypt.compare(password, res.rows[0].password)
             if(match) return true;
         }
@@ -124,7 +124,8 @@ async function addMove(game_id, player, move) {
     const db = await getClient();
     try {
         const player_id = await getPlayerId(player);
-        const player_color = (await db.query('SELECT wh_player = $2 as is_white, bl_player = $2 as is_black FROM games WHERE game_id = $1', [game_id, player_id])).rows[0];
+        const res = await db.query('SELECT wh_player = $2 as is_white, bl_player = $2 as is_black FROM games WHERE game_id = $1', [game_id, player_id]);
+        const player_color = res.rows[0];
         if (player_color.is_white) {
             await db.query('INSERT INTO moves(game_id, wh_move) VALUES($1, $2)', [game_id, move]);
         } else if (player_color.is_black) {
