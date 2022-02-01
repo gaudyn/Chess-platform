@@ -5,37 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serwis szachowy - pokój <%= locals.roomId%></title>
-    <script>let roomId = <%= locals.roomId%>; </script>
+    <link rel="stylesheet" href="/css/gameBoard.css">
+
+    <script>let roomId = <%= locals.roomId%></script>
+
+    <!--Socket communication-->
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/roomScript.js"></script>
+    <script>let client =  new ConnectionHandler('<%= locals.username%>')</script>
+
+    <!--React-->
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!--Room components-->
+    <script type="text/babel" src="/js/gameBoard.js"></script>
 </head>
 <body>
-    
-    <div>
-        Witaj w pokoju <%= locals.roomId%>
-    </div>
-    <div>
-        <table>
-            <tr>
-                <td>Białymi gra:</td>
-                <td>Czarnymi gra:</td>
-                <td>Gracze w pokoju</td>
-            </tr>
-            <tr>
-                <td id="whitePlayer">GRACZ 1</td>
-                <td id="blackPlayer">GRACZ 2</td>
-                <td id="audience">GRACZ 1, GRACZ 2</td>
-            </tr>
-        </table>
-    </div>
-    <div>
-        <table id="moves">
-            <tr>
-                <td>Runda</td>
-                <td>Ruch białych</td>
-                <td>Ruch czarnych</td>
-            </tr>
-        </table>
-    </div>
+    <div id="gameboard"></div>
 </body>
 </html>

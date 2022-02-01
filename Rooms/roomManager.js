@@ -35,7 +35,7 @@ function RoomManager() {
      * @param {string} roomId Room's id.
      * @param {(`white`|`black`|`watch`)} place Place to be taken.
      * @throws If the place specified is not `white` nor `black` nor `watch`.
-     * @returns {{white: string, black: string}} Object containing players' usernames in the room. `.white` contains the white player's username, `.black` contains the black player's username.
+     * @returns {{white: string, black: string, shouldEndCountdown: boolean}} Object containing players' usernames and whether countdown for players should end: `.white` contains the white player's username, `.black` contains the black player's username.
      */
     this.claimPlaceForUserInRoom = function (username, roomId, place) {
         if (place == 'white') {
@@ -46,22 +46,6 @@ function RoomManager() {
             return this.rooms[roomId].unclaimPlace(username);
         }
         throw Error('Unexpected place');
-    }
-
-    /**
-     * Starts a new game in the selected room.
-     * @param {string} roomId Room's id.
-     */
-    this.startGameInRoom = function (roomId) {
-        this.rooms[roomId].startGameInRoom();
-    }
-
-    /**
-     * Ends the game in the selected room.
-     * @param {string} roomId Room's id.
-     */
-    this.finishGameInRoom = function (roomId) {
-        this.rooms[roomId].finishGameInRoom();
     }
 
     /**

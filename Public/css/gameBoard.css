@@ -1,0 +1,65 @@
+.board-row:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.square {
+    background: #fff;
+    float: left;
+    font-family: 'Arial Unicode MS';
+    font-size: 55px;
+    height: 70px;
+    padding: 0;
+    text-align: center;
+    width: 70px;
+    cursor: pointer;
+    user-select: none;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none; 
+}
+
+.game, .info-buttons, .player-seats{
+    display: flex;
+    flex-direction: row;
+}
+
+.game-status {
+    padding: 10px;
+    width: 45%;
+}
+
+.board-border {
+    border: 2px solid black;
+}
+
+.player-info {
+    width: 100%;
+}
+
+.player-seat{
+    width:50%;
+    float: left;
+    border: 1px solid black;
+}
+
+.player-color{
+    height: 10px;
+    border-bottom: 1px solid black;
+}
+
+.player-name {
+    padding: 5px;
+    text-align: center;
+    width: 100%;
+    white-space:nowrap;
+}
+
+.info-button {
+    border: 1px solid black;
+    margin-left: -1px;
+    padding: 5px;
+    background-color: lightgray;
+}
