@@ -49,22 +49,6 @@ function RoomManager() {
     }
 
     /**
-     * Starts a new game in the selected room.
-     * @param {string} roomId Room's id.
-     */
-    this.startGameInRoom = function (roomId) {
-        this.rooms[roomId].startGameInRoom();
-    }
-
-    /**
-     * Ends the game in the selected room.
-     * @param {string} roomId Room's id.
-     */
-    this.finishGameInRoom = function (roomId) {
-        this.rooms[roomId].finishGameInRoom();
-    }
-
-    /**
      * Checks if a new game can be started in the room.
      * @param {string} roomId Room's id.
      * @returns `true` if the game can be started, `false` otherwise.

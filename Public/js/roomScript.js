@@ -20,6 +20,7 @@ function ConnectionHandler(username) {
     this.removePlayer = function(username){}
     this.gameStateChanged = function(state){}
     this.newMoveMade = function(move){}
+    this.resetBoard = function(){}
 
     this.createSocket = function (){
         var socket = io("http://localhost:3000", {autoConnect: false});
@@ -31,6 +32,12 @@ function ConnectionHandler(username) {
             this.updateWhitePlayer(room.whitePlayer);
             this.updateBlackPlayer(room.blackPlayer);
             this.updateAudience(room.audience);
+            this.resetBoard();
+            if(room.game.moves){
+                for(move of room.game.moves) {
+                    this.newMoveMade(move);
+                }
+            }
         })
 
         socket.on('claimPlace', (place, player) => {
@@ -55,6 +62,7 @@ function ConnectionHandler(username) {
 
         socket.on('gameStarted', () => {
             this.gameStateChanged('playing');
+            this.resetBoard();
             console.log('Gra rozpoczęta!');
         });
 

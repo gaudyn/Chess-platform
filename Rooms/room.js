@@ -1,3 +1,5 @@
+const { games, moves } = require('./../Database/DBConnection');
+
 function Room(){
     /**@type {string} */
     this.whitePlayer = undefined;
@@ -8,6 +10,12 @@ function Room(){
 
     /**@type {boolean} */
     this.gameStarted = false;
+
+    this.game = {
+        turn: 'white',
+        moves: [],
+        db_id: null
+    }
 
     /**
      * Connects user to the room.
@@ -21,13 +29,19 @@ function Room(){
      * Disconnects user from the room. If the user is not connected has no effect.
      * @param {string} username User's username.
      */
-    this.disconnectUser = function(username) {
+    this.disconnectUser = async function(username) {
         let index = this.audience.indexOf(username)
         if (index >= 0) {
             this.audience.splice(this.audience.indexOf(username), 1);
         }
-        if(username == this.whitePlayer) this.whitePlayer = undefined;
-        if(username == this.blackPlayer) this.blackPlayer = undefined;
+        if(username == this.whitePlayer){ 
+            this.whitePlayer = undefined;
+            this.endGame();
+        }
+        if(username == this.blackPlayer){
+            this.blackPlayer = undefined;
+            this.endGame();
+        }
     }
 
     /**
@@ -95,11 +109,13 @@ function Room(){
     /**
      * Starts a new game.
      */
-    this.startGame = function(){
+    this.startGame = async function(){
         this.gameStarted = true;
         whiteConfirm = false;
         blackConfirm = false;
-        //TODO: Create a new game and save it in the database
+        this.game.turn = 'white';
+        this.game.moves = [];
+        this.game.db_id = await games.createNewGame(this.whitePlayer, this.blackPlayer);
     }
 
     /**
@@ -109,7 +125,8 @@ function Room(){
         this.gameStarted = false;
         whiteConfirm = false;
         blackConfirm = false;
-        //TODO: Finish the game in the database
+
+        moves.finishGame(this.game.db_id);
     }
 
     /**
@@ -167,18 +184,32 @@ function Room(){
     /**
      * Makes a move by user.
      * @param {string} username User's username.
-     * @param {string} move Chess move.
+     * @param {{from: number[], to: number[]}} move Chess move.
      * @returns {boolean} `true` if the game has ended, `false` otherwise.
      */
-    this.makeMove = function (username, move) {
+    this.makeMove = function(username, move) {
         // TODO: Save the move in the database
-        if(username != this.whitePlayer && username != this.blackPlayer) return false;
+        if(!this.isMoveValid(username, move)) return false;
+
+        const [x1, y1] = move.from;
+        const [x, y] = move.to;
+
+        moves.addMove(this.game.db_id, username, `${x1}${y1}-${x}${y}`);
+        this.game.moves.push(move);
 
         if (move == 'end'){ 
-           this.gameStarted = false;
+            this.endGame();
             return true;
         }
         return false;
+    }
+
+    /**
+     * Gets all the made moves in currently running game.
+     * @returns Array of moves. `.white`/`.black` contains white's/black's move in the turn, 
+     */
+    this.getMoves = function(){
+        return this.game.moves;
     }
 }
 

@@ -162,64 +162,67 @@ io.on('connection', (socket) => {
     console.log(`W pokoju ${roomId} są gracze ${roomManager.rooms[roomId].audience}`)
     io.to(roomId).emit('fillRoom', room);
 
-    socket.on('disconnecting', (reason) => {
-        let connectedRooms = [...socket.rooms].filter(x => x != socket.id && x.search(/\d+-players/g)== -1);
-        roomManager.disconnectUserFromRooms(username, connectedRooms);
-        socket.to(connectedRooms).emit('removePlayer', username);
-        console.log('Gracz '+username+' został odłączony');
-    });
+    socket.on('disconnecting', function (reason) {
+            let connectedRooms = [...socket.rooms].filter(x => x != socket.id && x.search(/\d+-players/g) == -1);
+            roomManager.disconnectUserFromRooms(username, connectedRooms);
+            socket.to(connectedRooms).emit('removePlayer', username);
+            console.log('Gracz ' + username + ' został odłączony');
+        });
 
-    socket.on('claimPlace', (place) => {
-        let players = roomManager.claimPlaceForUserInRoom(username, roomId, place);
+    socket.on('claimPlace', function (place) {
+            let players = roomManager.claimPlaceForUserInRoom(username, roomId, place);
 
-        if(username == players.white || username == players.black){
-            socket.join(`${roomId}-players`);
-        } else {
-            socket.leave(`${roomId}-players`);
-        }
-        if(players.shouldEndCountdown){
-            clearTimeout(roomCountdowns[roomId]);
-        }
+            if (username == players.white || username == players.black) {
+                socket.join(`${roomId}-players`);
+            } else {
+                socket.leave(`${roomId}-players`);
+            }
+            if (players.shouldEndCountdown) {
+                clearTimeout(roomCountdowns[roomId]);
+            }
 
-        io.to(roomId).emit('claimPlace', 'white', players.white);
-        io.to(roomId).emit('claimPlace', 'black', players.black);
+            io.to(roomId).emit('claimPlace', 'white', players.white);
+            io.to(roomId).emit('claimPlace', 'black', players.black);
 
-        if(roomManager.canStartGameInRoom(roomId)) {
-            console.log(`Game in the room ${roomId} is about to start!`);
-            io.to(`${roomId}-players`).emit('gameCanStart');
-            // Countdown for players to start the game.
-            roomCountdowns[roomId] = setTimeout( () => {
-                if(roomManager.isGameRunningInRoom(roomId)) return;
-                console.log(`Game in the room ${roomId} is cancelled!`);
-                roomManager.confirmStartForRoom(null, roomId);
+            if (roomManager.canStartGameInRoom(roomId)) {
+                console.log(`Game in the room ${roomId} is about to start!`);
+                io.to(`${roomId}-players`).emit('gameCanStart');
+                // Countdown for players to start the game.
+                roomCountdowns[roomId] = setTimeout(async function(){
+                    if (roomManager.isGameRunningInRoom(roomId))
+                        return;
+                    console.log(`Game in the room ${roomId} is cancelled!`);
+                    roomManager.confirmStartForRoom(null, roomId);
+                    io.to(roomId).emit('gameEnded');
+                    io.to(roomId).emit('fillRoom', room);
+                }, 15000);
+            } else if (!roomManager.isGameRunningInRoom(roomId)) {
                 io.to(roomId).emit('gameEnded');
-                io.to(roomId).emit('fillRoom', room);
-            }, 15000);
-        } else if(!roomManager.isGameRunningInRoom(roomId)){
-            io.to(roomId).emit('gameEnded');
-        }
-    });
-    socket.on('confirmStart', () => {
-        let state = roomManager.confirmStartForRoom(username, roomId);
-        console.log(`Player ${username} has confimed start!`);
-        if (state == 'start') {
-            io.to(roomId).emit('gameStarted');
-            console.log(`Game in the room ${roomId} has started!`);
-            if(roomCountdowns[roomId]) clearTimeout(roomCountdowns[roomId]);
-        }
-    });
+            }
+        });
+    socket.on('confirmStart', function () {
+            let state = roomManager.confirmStartForRoom(username, roomId);
+            console.log(`Player ${username} has confimed start!`);
+            if (state == 'start') {
+                io.to(roomId).emit('gameStarted');
+                console.log(`Game in the room ${roomId} has started!`);
+                if (roomCountdowns[roomId])
+                    clearTimeout(roomCountdowns[roomId]);
+            }
+        });
 
-    socket.on('makeMove', (move) => {
-        if(roomManager.checkMoveInRoom(username, roomId, move)){
-            // Valid move
-            let gameEnded = roomManager.makeMoveInRoom(username, roomId, move);
-            io.to(roomId).emit('newMove', move, username);
-            if (gameEnded) io.to(roomId).emit('gameEnded');
-        } else {
-            // Invalid move, kick the player!
-            roomManager.claimPlaceForUserInRoom(username, roomId, 'watch');
-        }
-    })
+    socket.on('makeMove', function (move) {
+            if (roomManager.checkMoveInRoom(username, roomId, move)) {
+                // Valid move
+                let gameEnded = roomManager.makeMoveInRoom(username, roomId, move);
+                io.to(roomId).emit('newMove', move, username);
+                if (gameEnded)
+                    io.to(roomId).emit('gameEnded');
+            } else {
+                // Invalid move, kick the player!
+                roomManager.claimPlaceForUserInRoom(username, roomId, 'watch');
+            }
+        })
 })
 
 

@@ -49,8 +49,25 @@ class Board extends React.Component {
             squares[y1][x1] = ' ';
             console.log("From:" + [x1,y1] + " to: " + [x,y]);
             // Make move
-            this.setState({
+            self.setState({
                 pieces: squares
+            });
+        }
+
+        client.resetBoard = () => {
+            self.setState({
+                // TODO: Replace with actual game object array
+                pieces : [
+                    ['♜','♞','♝','♚','♛','♝','♞','♜'],
+                    ['♟','♟','♟','♟','♟','♟','♟','♟'],
+                    [' ',' ',' ',' ',' ',' ',' ',' '],
+                    [' ',' ',' ',' ',' ',' ',' ',' '],
+                    [' ',' ',' ',' ',' ',' ',' ',' '],
+                    [' ',' ',' ',' ',' ',' ',' ',' '],
+                    ['♙','♙','♙','♙','♙','♙','♙','♙'],
+                    ['♖','♘','♗','♔','♕','♗','♘','♖']
+                ],
+                fromSquare: null
             });
         }
     }
