@@ -56,6 +56,12 @@ app.get('/waitroom', authorize, (req, res) => {
     }
 });
 
+app.post('/waitroom', function(req, res){
+    var newRoomNumber = roomManager.maxRoomNumber(req.params.roomId) + 1;
+    roomManager.createNewRoom(newRoomNumber);
+    res.redirect(`/room/${newRoomNumber}`);
+});
+
 app.get('/room', authorize, (req, res) => {
     // możemy rozróżniać użytkowników na tych z kontem i tych bez konta
     // (ci, którzy nie podali żadnego loginu nie są wpuszczani przez authorize)
@@ -157,13 +163,18 @@ app.post('/noAccount', async function(req, res){
 
 app.get('/room/:roomId(\\d+)', authorize, (req, res) => {
     // Enable only numeric ids for rooms
-    var userCookie = JSON.parse(req.signedCookies.cookie);
-    if (userCookie.userType == 'loggedIn') {
-        res.render('room.ejs', {
-            roomId: req.params.roomId,
-            username: userCookie.username
-            });
-        }
+    if(roomManager.isRoomCreated(req.params.roomId)) {
+        var userCookie = JSON.parse(req.signedCookies.cookie);
+        if (userCookie.userType == 'loggedIn') {
+            res.render('room.ejs', {
+                roomId: req.params.roomId,
+                username: userCookie.username
+                });
+            }
+    } else {
+        res.redirect('./waitroom');
+    }
+
     //res.render('room.ejs', {roomId: req.params.roomId});
 });
 
