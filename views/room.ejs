@@ -8,7 +8,6 @@
     <script>let roomId = <%= locals.roomId%>; </script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/roomScript.js"></script>
-    <script>let client =  new ConnectionHandler('<%= locals.username%>')</script>
 </head>
 <body>
     
@@ -38,7 +37,5 @@
             </tr>
         </table>
     </div>
-
-<a href="/waitroom">Back</a>
 </body>
 </html>
