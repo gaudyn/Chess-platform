@@ -75,24 +75,6 @@ app.post('/waitroom', function(req, res){
     res.redirect(`/room/${newRoomNumber}`);
 });
 
-app.get('/room', authorize, (req, res) => {
-    // możemy rozróżniać użytkowników na tych z kontem i tych bez konta
-    // (ci, którzy nie podali żadnego loginu nie są wpuszczani przez authorize)
-    var userCookie = JSON.parse(req.signedCookies.cookie);
-    if (userCookie.userType == 'loggedIn') {
-        res.render('room', { 
-            userTypeMessage : "loggedIn", 
-            usernameMessage: userCookie.username,
-        });
-    } else {
-        res.render('room', {
-            userTypeMessage : "noAccount", 
-            usernameMessage: userCookie.username,
-        });
-    }
-});
-
-
 //----------------------------------------
 
 app.get('/logout', (req, res) => {
@@ -173,16 +155,6 @@ app.post('/noAccount', async function(req, res){
 
 app.get('/room/:roomId(\\d+)', authorize, (req, res) => {
     // Enable only numeric ids for rooms
-    var userCookie = JSON.parse(req.signedCookies.cookie);
-    res.render('room.ejs', {roomId: req.params.roomId, username: userCookie.username});
-});
-
-
-
-//----------------------------------------------------------------
-
-app.get('/room/:roomId(\\d+)', authorize, (req, res) => {
-    // Enable only numeric ids for rooms
     if(roomManager.isRoomCreated(req.params.roomId)) {
         var userCookie = JSON.parse(req.signedCookies.cookie);
         if (userCookie.userType == 'loggedIn') {
@@ -192,7 +164,7 @@ app.get('/room/:roomId(\\d+)', authorize, (req, res) => {
                 });
             }
     } else {
-        res.redirect('./waitroom');
+        res.redirect('/waitroom');
     }
 
     //res.render('room.ejs', {roomId: req.params.roomId});
