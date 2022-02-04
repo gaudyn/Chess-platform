@@ -78,12 +78,10 @@ app.get('/room/:roomId(\\d+)', authorize, (req, res) => {
     // Enable only numeric ids for rooms
     if(roomManager.isRoomCreated(req.params.roomId)) {
         var userCookie = JSON.parse(req.signedCookies.cookie);
-        if (userCookie.userType == 'loggedIn') {
-            res.render('room.ejs', {
-                roomId: req.params.roomId,
-                username: userCookie.username
-                });
-            }
+        res.render('room.ejs', {
+            roomId: req.params.roomId,
+            username: userCookie.username
+            });
     } else {
         res.redirect('/waitroom');
     }
