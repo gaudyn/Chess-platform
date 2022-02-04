@@ -15,35 +15,35 @@
 
     <h1>Welcome to Chess Platform!</h1>
 
-<form method="POST">
-    <div id="login">
-        <div>
-            In order to create an account, choose an username and a password. 
-        </div>
-        <br />
-        <div>
-            <label>Enter your username:</label>
-            <input type='text' name='UsernameInput' />
-        </div>
-        <div>
-            <label>Enter your password:</label>
-            <input type='password' name='PasswordInput' />
-        </div>
-        <div>
-            <label>Confirm your password:</label>
-            <input type='password' name='PasswordConfirmationInput' />
-        </div>
-        <div>
-            <button id="registerButton">Register</button>
-        </div>
-
-        <% if ( locals.message ) { %>
-            <div class='message'>
-                <%= locals.message %>
+    <form method="POST">
+        <div id="login">
+            <div>
+                In order to create an account, choose an username and a password. 
             </div>
-        <% } %>
-    </div>
-</form>
+            <br />
+            <div>
+                <label>Enter your username:</label>
+                <input type='text' name='UsernameInput' />
+            </div>
+            <div>
+                <label>Enter your password:</label>
+                <input type='password' name='PasswordInput' />
+            </div>
+            <div>
+                <label>Confirm your password:</label>
+                <input type='password' name='PasswordConfirmationInput' />
+            </div>
+            <div>
+                <button id="registerButton">Register</button>
+            </div>
+
+            <% if ( locals.message ) { %>
+                <div class='message'>
+                    <%= locals.message %>
+                </div>
+            <% } %>
+        </div>
+    </form>
 
     <a href="./">Back</a>
 

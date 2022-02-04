@@ -17,11 +17,27 @@ app.use(express.static(__dirname + '/Public'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser("To jest nasz sekret"));
+app.use(express.static(__dirname + '/Public'));
 
-//----------------------------------------
+//----------  GET requests Handling   ------------------------------------------
 
 app.get('/', function (req, res) {
-    res.render('mainpage');
+    if (req.signedCookies.cookie) {
+        var userCookie = JSON.parse(req.signedCookies.cookie);
+        if (userCookie.userType == 'loggedIn') {
+            res.render('mainpage', { 
+                userTypeMessage : "loggedIn",
+                usernameMessage: userCookie.username,
+            });
+        } else {
+            res.render('mainpage', { 
+                userTypeMessage : "noAccount",
+                usernameMessage: userCookie.username,
+            });
+        }
+    } else {
+        res.render('mainpage');
+    }
 })
 
 app.get('/login', (req, res) => {
@@ -37,44 +53,58 @@ app.get('/noAccount', (req, res) => {
 });
 
 app.get('/waitroom', authorize, (req, res) => {
-    // możemy rozróżniać użytkowników na tych z kontem i tych bez konta
-    // (ci, którzy nie podali żadnego loginu nie są wpuszczani przez authorize)
     var userCookie = JSON.parse(req.signedCookies.cookie);
     if (userCookie.userType == 'loggedIn') {
-        res.render('waitroom', { userTypeMessage : "loggedIn", usernameMessage: userCookie.username});
+        res.render('waitroom', { 
+            userTypeMessage : "loggedIn",
+            usernameMessage: userCookie.username,
+            roomsList: roomManager.getRooms()
+        });
     } else {
-        res.render('waitroom', { userTypeMessage : "noAccount", usernameMessage: userCookie.username});
+        res.render('waitroom', {
+            userTypeMessage : "noAccount",
+            usernameMessage: userCookie.username,
+            roomsList: roomManager.rooms
+        });
     }
 });
-
-app.get('/room', authorize, (req, res) => {
-    // możemy rozróżniać użytkowników na tych z kontem i tych bez konta
-    // (ci, którzy nie podali żadnego loginu nie są wpuszczani przez authorize)
-    var userCookie = JSON.parse(req.signedCookies.cookie);
-    if (userCookie.userType == 'loggedIn') {
-        res.render('room', { userTypeMessage : "loggedIn", usernameMessage: userCookie.username});
-    } else {
-        res.render('room', { userTypeMessage : "noAccount", usernameMessage: userCookie.username});
-    }
-});
-
-
-//----------------------------------------
 
 app.get('/logout', (req, res) => {
     res.cookie('cookie', '', { maxAge: -1 });
     res.redirect('/')
 });
 
+app.get('/room/:roomId(\\d+)', authorize, (req, res) => {
+    // Enable only numeric ids for rooms
+    if(roomManager.isRoomCreated(req.params.roomId)) {
+        var userCookie = JSON.parse(req.signedCookies.cookie);
+        res.render('room.ejs', {
+            roomId: req.params.roomId,
+            username: userCookie.username
+            });
+    } else {
+        res.redirect('/waitroom');
+    }
+});
+
+//----------  POST requests Handling   ------------------------------------------
 
 /**
- * Handles login request
+ * Create new room request
+ */
+app.post('/waitroom', function(req, res){
+    var newRoomNumber = roomManager.maxRoomNumber(req.params.roomId) + 1;
+    roomManager.createNewRoom(newRoomNumber);
+    res.redirect(`/room/${newRoomNumber}`);
+});
+
+
+/**
+ * login request
  */
 app.post('/login', async function(req, res){
     var loginUsername = req.body.UsernameInput;
     var loginPassword = req.body.PasswordInput;
-
-    //if (loginPassword == '123' && loginUsername != false) {
     if (loginUsername != false && (await users.logIn(loginUsername, loginPassword))) {
         var cookieValue = JSON.stringify({ 
             username: loginUsername,
@@ -88,8 +118,8 @@ app.post('/login', async function(req, res){
 });
 
 /**
- * Handles register request
-*/
+ * register request
+ */
 app.post('/register', async function(req, res){
     var registerUsername = req.body.UsernameInput;
     var registerPassword = req.body.PasswordInput;
@@ -111,8 +141,8 @@ app.post('/register', async function(req, res){
 });
 
 /**
- * Handles anonymous user request
-*/
+ *  Create anonymous user request
+ */
 app.post('/noAccount', async function(req, res){
     var noAccUsername = req.body.UsernameInput;
    
@@ -124,7 +154,7 @@ app.post('/noAccount', async function(req, res){
                 userType: 'noAccount'
             });
     
-            res.cookie('cookie', cookieValue, {signed: true, maxAge: 60*60*24});
+            res.cookie('cookie', cookieValue, {signed: true, maxAge: 1000*60*60*24});
             res.redirect( './waitroom');
         }
         catch(err) {
@@ -135,17 +165,11 @@ app.post('/noAccount', async function(req, res){
     }
 });
 
-//----------------------------------------------------------------
-
-app.get('/room/:roomId(\\d+)', authorize, (req, res) => {
-    // Enable only numeric ids for rooms
-    var userCookie = JSON.parse(req.signedCookies.cookie);
-    res.render('room.ejs', {roomId: req.params.roomId, username: userCookie.username});
-});
-
 app.use((req, res, next) => {
     res.render('404', { url: req.url });
 });
+
+//----------  Sockets   ------------------------------------------
 
 var roomManager = new RoomManager();
 /**@type {Object.<string, NodeJS.Timeout>} */
