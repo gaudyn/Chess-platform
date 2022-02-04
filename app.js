@@ -156,7 +156,7 @@ app.post('/noAccount', async function(req, res){
                 userType: 'noAccount'
             });
     
-            res.cookie('cookie', cookieValue, {signed: true, maxAge: 60*60*24});
+            res.cookie('cookie', cookieValue, {signed: true, maxAge: 1000*60*60*24});
             res.redirect( './waitroom');
         }
         catch(err) {
