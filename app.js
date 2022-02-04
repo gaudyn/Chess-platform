@@ -22,7 +22,22 @@ app.use(express.static(__dirname + '/Public'));
 //----------------------------------------
 
 app.get('/', function (req, res) {
-    res.render('mainpage');
+    if (req.signedCookies.cookie) {
+        var userCookie = JSON.parse(req.signedCookies.cookie);
+        if (userCookie.userType == 'loggedIn') {
+            res.render('mainpage', { 
+                userTypeMessage : "loggedIn",
+                usernameMessage: userCookie.username,
+            });
+        } else {
+            res.render('mainpage', { 
+                userTypeMessage : "noAccount",
+                usernameMessage: userCookie.username,
+            });
+        }
+    } else {
+        res.render('mainpage');
+    }
 })
 
 app.get('/login', (req, res) => {
@@ -38,8 +53,6 @@ app.get('/noAccount', (req, res) => {
 });
 
 app.get('/waitroom', authorize, (req, res) => {
-    // możemy rozróżniać użytkowników na tych z kontem i tych bez konta
-    // (ci, którzy nie podali żadnego loginu nie są wpuszczani przez authorize)
     var userCookie = JSON.parse(req.signedCookies.cookie);
     if (userCookie.userType == 'loggedIn') {
         res.render('waitroom', { 
