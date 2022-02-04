@@ -11,53 +11,48 @@
 </head>
 <body style="background-color:rgb(204, 178, 138);">
     
-<h1>Waitroom</h1>
+    <h1>Waitroom</h1>
 
-
-<div  style="font-size: 30px; position: absolute; top: 100px; left: 800px";>
-
-    <div>List of currently open rooms:</div>
-    <br />
-    <% for (const roomId of Object.keys(locals.roomsList) ) { %>
-        <div>
-            <a href="./room/<%= roomId %>" > Room number <%= roomId %> </a>
-            <% if(locals.roomsList[roomId].gameStarted) { %>
-                Game started
-                <% } else { %>
-                    Waiting for start
-                    <% } %>
-        </div>
+    <div  style="font-size: 30px; position: absolute; top: 100px; left: 800px";>
+        <div>List of currently open rooms:</div>
         <br />
-    <% } %>
-    
-</div>
-
-<form method="POST">
-    <div  style="font-size: 30px; position: absolute; top: 100px; left: 1200px";>
-        <button style="font-size: 20px" id="createNewRoomButton">Create new room</button>
+        <% for (const roomId of Object.keys(locals.roomsList) ) { %>
+            <div>
+                <a href="./room/<%= roomId %>" > Room number <%= roomId %> </a>
+                <% if(locals.roomsList[roomId].gameStarted) { %>
+                    Game started
+                    <% } else { %>
+                        Waiting for start
+                        <% } %>
+            </div>
+            <% } %>   
+        <br />
     </div>
-</form>
 
-<div style="font-size: 30px; position: absolute; top: 100px; left: 100px">
-    <% if ( locals.userTypeMessage == 'loggedIn' | locals.userTypeMessage == 'noAccount') { %>
-        <div>
-            Your username: 
-            <%= locals.usernameMessage %>
+    <form method="POST">
+        <div  style="font-size: 30px; position: absolute; top: 100px; left: 1200px";>
+            <button style="font-size: 20px" id="createNewRoomButton">Create new room</button>
         </div>
-        <% } %>
-</div>
+    </form>
 
-<div style="font-size: 30px; position: absolute; top: 150px; left: 100px">
+    <div style="font-size: 30px; position: absolute; top: 100px; left: 100px">
+        <% if ( locals.userTypeMessage == 'loggedIn' | locals.userTypeMessage == 'noAccount') { %>
+            <div>
+                Your username: 
+                <%= locals.usernameMessage %>
+            </div>
+            <% } %>
+    </div>
 
-    <% if ( locals.userTypeMessage == 'loggedIn' ) { %>
-        <a style="font-size: 30px" href="./logout">Logout</a>
-    <% } %>
+    <div style="font-size: 30px; position: absolute; top: 150px; left: 100px">
+        <% if ( locals.userTypeMessage == 'loggedIn' ) { %>
+            <a style="font-size: 30px" href="./logout">Logout</a>
+            <% } %>
 
-    <% if ( locals.userTypeMessage == 'noAccount' ) { %>
-        <a style="font-size: 30px" href="./register">Register</a>
-    <% } %>
-</div>
-
+        <% if ( locals.userTypeMessage == 'noAccount' ) { %>
+            <a style="font-size: 30px" href="./register">Register</a>
+            <% } %>
+    </div>
 
 </body>
 </html>
