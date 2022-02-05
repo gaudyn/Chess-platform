@@ -1,15 +1,5 @@
 console.log('Client connected to server!');
 
-/**@type {HTMLElement} */
-var whitePlayer;
-
-/**@type {HTMLElement} */
-var blackPlayer;
-
-/**@type {HTMLElement} */
-var audience;
-
-
 function ConnectionHandler(username) {
 
     // Helper functions 
