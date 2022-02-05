@@ -1,2 +1,4 @@
 node_modules
 DBSecrets.js
+package-lock.json
+.vscode
