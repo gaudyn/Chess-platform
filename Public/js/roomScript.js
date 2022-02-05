@@ -21,6 +21,15 @@ function ConnectionHandler(username) {
             console.log('Fill room with '+ JSON.stringify(room));
             this.updateWhitePlayer(room.whitePlayer);
             this.updateBlackPlayer(room.blackPlayer);
+
+            console.log(room.audience);
+            //Prepare audience to make the user first on the list.
+            room.audience = room.audience.filter((user) => {
+                return(user != username)
+            });
+            console.log(room.audience);
+            room.audience.splice(0, 0, username);
+
             this.updateAudience(room.audience);
             this.resetBoard();
             if(room.game.moves){

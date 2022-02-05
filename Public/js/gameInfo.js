@@ -88,8 +88,11 @@ class ConnectedUsers extends React.Component {
             <div className="connected-users">
                 <header>Players watching:</header>
                 <ul>
-                    {this.state.audience.map((player) => {
-                        return(<li key={player}>{player}</li>);
+                    {this.state.audience.map((player, index) => {
+                        if(index == 0) return(<li key={player}><b>{player}</b></li>);
+                        return(<li key={player}>
+                        {player}
+                        </li>);
                     })}
                 </ul>
             </div>
