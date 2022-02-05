@@ -142,6 +142,9 @@ class PlayerInfo extends React.Component {
     render() {
         return(
             <div className="player-info">
+                <a href="/waitroom" style={{marginRight: "5px"}}>
+                    Back
+                </a>
                 Room {roomId} - {this.roomMessage()}
                 <hr/>
                 <div className="player-seats">
