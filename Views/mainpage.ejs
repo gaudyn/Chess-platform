@@ -20,7 +20,16 @@
     <a href="./noAccount">continue without an account</a>
 
     <div  style="font-size: 20px; position: absolute; top: 100px; left: 1200px";>
-        <% if ( locals.userTypeMessage == 'loggedIn' | locals.userTypeMessage == 'noAccount') { %>
+        <% if ( locals.userTypeMessage == 'loggedIn') { %>
+            <div>
+                Your username: 
+                <%= locals.usernameMessage %>
+            </div>
+            <a href="./waitroom">Waitroom</a>
+            <br />
+            <a href="./logout">Logout</a>
+        <% } %>
+        <% if ( locals.userTypeMessage == 'noAccount') { %>
             <div>
                 Your username: 
                 <%= locals.usernameMessage %>
