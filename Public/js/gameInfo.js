@@ -31,6 +31,61 @@ class GameInfo extends React.Component {
  * Moves made in the game.
  */
 class GameMoves extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            moves: []
+        }
+
+        let self = this;
+        client.updateMoveList = (move) => {
+            if(move == null){
+                self.setState({
+                    moves: []
+                })
+                return;
+            }
+
+            let oldMoves = self.state.moves;
+            oldMoves.push(move);
+            self.setState({
+                moves: oldMoves
+            })
+        }
+    }
+
+    /**
+     * Changes move from column/row format to chess format.
+     * @param {{from: [x1,y1], to: [x,y]}} move - Game move
+     */
+    beautifyMove(move){
+        const [x1, y1] = move.from;
+        const [x2, y2] = move.to;
+
+        return String.fromCharCode(x1+65)+(8-y1)+'-'+String.fromCharCode(x2+65)+(8-y2);
+    }
+
+    /**
+     * Prepare move array for display.
+     */
+    getMadeMoves(){
+        let preparedMoves = [];
+        for(var i = 0; i < this.state.moves.length; i++){
+            let move = this.state.moves[i];
+            if(i%2 == 0){
+                //White move
+                preparedMoves.push({white: this.beautifyMove(move)})
+            } else {
+                //Black move
+                let currentMove = preparedMoves.pop();
+                currentMove.black = this.beautifyMove(move);
+                preparedMoves.push(currentMove);
+            }
+        }
+        return preparedMoves;
+    }
+
     /**
      * Render made moves.
      */
@@ -39,22 +94,23 @@ class GameMoves extends React.Component {
             <table>
             <thead>
                 <tr>
-                    <td>Ruch</td>
-                    <td>Biały</td>
-                    <td>Czarny</td>
+                    <td>Move</td>
+                    <td>White</td>
+                    <td>Black</td>
                 </tr>
             </thead>
+            
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>We5</td>
-                    <td>Hh6</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>e7</td>
-                    <td>Kh3</td>
-                </tr>
+            {
+                this.getMadeMoves().map((move, index) => {
+                    return(
+                    <tr key={`Move-row-${index}`}>
+                        <td>{index}</td>
+                        <td>{move.white}</td>
+                        <td>{move.black ? move.black : ''}</td>
+                    </tr>)
+                })
+            }
             </tbody>
                 
             </table>

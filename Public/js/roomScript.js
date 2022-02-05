@@ -10,6 +10,7 @@ function ConnectionHandler(username) {
     this.removePlayer = function(username){}
     this.gameStateChanged = function(state){}
     this.newMoveMade = function(move){}
+    this.updateMoveList = function(move) {}
     this.resetBoard = function(){}
 
     this.createSocket = function (){
@@ -35,6 +36,7 @@ function ConnectionHandler(username) {
             if(room.game.moves){
                 for(move of room.game.moves) {
                     this.newMoveMade(move);
+                    this.updateMoveList(move);
                 }
             }
         })
@@ -62,6 +64,7 @@ function ConnectionHandler(username) {
         socket.on('gameStarted', () => {
             this.gameStateChanged('playing');
             this.resetBoard();
+            this.updateMoveList(null);
             console.log('Gra rozpoczęta!');
         });
 
@@ -71,6 +74,7 @@ function ConnectionHandler(username) {
         });
 
         socket.on('newMove', (move, player) => {
+            this.updateMoveList(move);
             if(username != player) this.newMoveMade(move);
             console.log(`Nowy ruch ${move} wykonany przez ${player}!`);
         });
