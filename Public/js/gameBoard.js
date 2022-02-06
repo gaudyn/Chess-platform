@@ -56,6 +56,8 @@ class Board extends React.Component {
             self.setState({
                 pieces: squares
             });
+            const tr = this.translate({from: [x1, y1], to: [x,y]})
+            chess.move(tr);
         }
 
         client.resetBoard = () => {
@@ -107,6 +109,8 @@ class Board extends React.Component {
                 pieces: squares,
                 fromSquare: null
             });
+            const tr = this.translate({from: [x1, y1], to: [x,y]})
+            chess.move(tr);
         }
         
     }
@@ -138,8 +142,12 @@ class Board extends React.Component {
     isMovePossible(x,y) {
         if (!this.state.fromSquare) return false;
         // TODO: Check in engine if the move is possible
-        return (this.state.fromSquare[0] == x || this.state.fromSquare[1] == y);
-        //return move(translate({from: [this.state.fromSquare[0],this.state.fromSquare[1]], to: [x,y]}));
+        const tr = this.translate({from: [this.state.fromSquare[0],this.state.fromSquare[1]], to: [x,y]});
+        const legalMoves = chess.moves({ square: tr.from, verbose: true });
+        for (let mv of legalMoves) {
+            if (mv.to == tr.to) return true
+        }
+        return false
     }
 
     /**
