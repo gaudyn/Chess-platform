@@ -12,7 +12,7 @@ async function getClient(){
         console.log('Connected to DB!');
         return db;
     } catch(e) {
-        console.log('Could not connect to db: '+ err);
+        console.log('Could not connect to db: '+ e);
     }
 }
 /**
