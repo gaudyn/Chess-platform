@@ -2,6 +2,7 @@
  * Creates a square for the gameboard.
  * @param {*} props `.color` - Square color, `.cursor` - Type of cursor for the square, `.value` - 
  */
+
 function Square(props) {
     return (
         <div className="square" 
@@ -25,14 +26,14 @@ class Board extends React.Component {
         this.state = {
             // TODO: Replace with actual game object array
             pieces : [
-                ['♜','♞','♝','♚','♛','♝','♞','♜'],
+                ['♜','♞','♝','♛','♚','♝','♞','♜'],
                 ['♟','♟','♟','♟','♟','♟','♟','♟'],
                 [' ',' ',' ',' ',' ',' ',' ',' '],
                 [' ',' ',' ',' ',' ',' ',' ',' '],
                 [' ',' ',' ',' ',' ',' ',' ',' '],
                 [' ',' ',' ',' ',' ',' ',' ',' '],
                 ['♙','♙','♙','♙','♙','♙','♙','♙'],
-                ['♖','♘','♗','♔','♕','♗','♘','♖']
+                ['♖','♘','♗','♕','♔','♗','♘','♖']
             ],
             fromSquare: null,
             isBlackPlaying: false
@@ -61,14 +62,14 @@ class Board extends React.Component {
             self.setState({
                 // TODO: Replace with actual game object array
                 pieces : [
-                    ['♜','♞','♝','♚','♛','♝','♞','♜'],
+                    ['♜','♞','♝','♛','♚','♝','♞','♜'],
                     ['♟','♟','♟','♟','♟','♟','♟','♟'],
                     [' ',' ',' ',' ',' ',' ',' ',' '],
                     [' ',' ',' ',' ',' ',' ',' ',' '],
                     [' ',' ',' ',' ',' ',' ',' ',' '],
                     [' ',' ',' ',' ',' ',' ',' ',' '],
                     ['♙','♙','♙','♙','♙','♙','♙','♙'],
-                    ['♖','♘','♗','♔','♕','♗','♘','♖']
+                    ['♖','♘','♗','♕','♔','♗','♘','♖']
                 ],
                 fromSquare: null
             });
@@ -122,6 +123,12 @@ class Board extends React.Component {
             && this.state.fromSquare[1] == y);
     }
 
+    translate(move) {
+        const [x1, y1] = move.from;
+        const [x2, y2] = move.to;
+        return {from: String.fromCharCode(x1+97)+(8-y1), to: String.fromCharCode(x2+97)+(8-y2)};
+    }
+
     /**
      * Check if player can move selected piece to the square.
      * @param {number} x - X coordinate of the square
@@ -132,6 +139,7 @@ class Board extends React.Component {
         if (!this.state.fromSquare) return false;
         // TODO: Check in engine if the move is possible
         return (this.state.fromSquare[0] == x || this.state.fromSquare[1] == y);
+        //return move(translate({from: [this.state.fromSquare[0],this.state.fromSquare[1]], to: [x,y]}));
     }
 
     /**
@@ -145,11 +153,11 @@ class Board extends React.Component {
         var cursor = 'pointer';
         var color;
         if (this.isSelected(x,y)) {
-            color = isLight ? '#4CB22E' : '#306F1D';
+            color = !isLight ? '#4CB22E' : '#306F1D';
         } else if (this.isMovePossible(x,y)) {
-            color = isLight ? '#2EB288' : '#1D6F55';
+            color = !isLight ? '#2EB288' : '#1D6F55';
         } else {
-            color = isLight ? '#F5F4E7' : '#7C7B77';
+            color = !isLight ? '#F5F4E7' : '#7C7B77';
             cursor = this.state.pieces[y][x] != ' ' ? 'pointer' : 'auto';
         }
 
