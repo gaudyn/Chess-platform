@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serwis szachowy - strona powitalna</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body style="background-color:rgb(194, 156, 100); font-size: 30px">
+        
+    <h1>Welcome to Chess Platform!</h1>
+
+    <a href="./register">create an account</a>
+    <br />
+    <a href="./login">log in</a>
+    <br />
+    <a href="./noAccount">continue without an account</a>
+
+    <div  style="font-size: 20px; position: absolute; top: 100px; left: 1200px";>
+        <% if ( locals.userTypeMessage == 'loggedIn' | locals.userTypeMessage == 'noAccount') { %>
+            <div>
+                Your username: 
+                <%= locals.usernameMessage %>
+            </div>
+            <a href="./waitroom">Waitroom</a>
+        <% } %>
+    </div>
+
+</body>
+</html>

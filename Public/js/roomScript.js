@@ -1,63 +1,95 @@
 console.log('Client connected to server!');
 
-/**@type {HTMLElement} */
-var whitePlayer;
-
-/**@type {HTMLElement} */
-var blackPlayer;
-
-/**@type {HTMLElement} */
-var audience;
-
-
 function ConnectionHandler(username) {
-    this.socket = (function (){
+
+    // Helper functions 
+    this.updateWhitePlayer = function(username){}
+    this.updateBlackPlayer = function(username){}
+    this.turnGameboard = function(shouldTurn){}
+    this.updateAudience = function([audience]){}
+    this.removePlayer = function(username){}
+    this.gameStateChanged = function(state){}
+    this.newMoveMade = function(move){}
+    this.updateMoveList = function(move) {}
+    this.resetBoard = function(){}
+
+    this.createSocket = function (){
         var socket = io("http://localhost:3000", {autoConnect: false});
         socket.auth = {username, roomId};
         socket.connect();
 
         socket.on('fillRoom', (room) => {
-            console.log('Fill room with '+ room.toString());
-            whitePlayer.innerHTML = room.whitePlayer;
-            blackPlayer.innerHTML = room.blackPlayer;
-            audience.innerHTML = room.audience.join(', ');
+            console.log('Fill room with '+ JSON.stringify(room));
+            this.updateWhitePlayer(room.whitePlayer);
+            this.updateBlackPlayer(room.blackPlayer);
+
+            console.log(room.audience);
+            //Prepare audience to make the user first on the list.
+            room.audience = room.audience.filter((user) => {
+                return(user != username)
+            });
+            console.log(room.audience);
+            room.audience.splice(0, 0, username);
+
+            this.updateAudience(room.audience);
+            this.resetBoard();
+            this.updateMoveList(null);
+            if(room.game.moves){
+                for(move of room.game.moves) {
+                    this.newMoveMade(move);
+                    this.updateMoveList(move);
+                }
+            }
         })
 
         socket.on('claimPlace', (place, player) => {
             if (place == 'white'){
-                whitePlayer.innerHTML = player
+                this.updateWhitePlayer(player)
             } else if (place == 'black') {
-                blackPlayer.innerHTML = player
+                this.updateBlackPlayer(player)
+                if(player == username) this.turnGameboard(true);
+                return;
             } 
+            if(player == username) this.turnGameboard(false);
         });
 
         socket.on('removePlayer', (username) => {
-            let connectedUsers = audience.innerHTML.split(', ');
-            let index = connectedUsers.indexOf(username);
-            if (index >= 0){
-                connectedUsers.splice(index, 1);
-            }
-            audience.innerHTML = connectedUsers.join(', ');
+            this.removePlayer(username);
         });
 
         socket.on('gameCanStart', () => {
+            this.gameStateChanged('countdown');
             console.log('Zatwierdź grę '+username);
         });
 
         socket.on('gameStarted', () => {
+            this.gameStateChanged('playing');
+            this.resetBoard();
+            this.updateMoveList(null);
             console.log('Gra rozpoczęta!');
         });
 
         socket.on('gameEnded', () => {
+            this.gameStateChanged('waiting')
             console.log('Gra zakończona');
         });
 
         socket.on('newMove', (move, player) => {
+            this.updateMoveList(move);
+            if(username != player) this.newMoveMade(move);
             console.log(`Nowy ruch ${move} wykonany przez ${player}!`);
         });
 
         return socket;
-    })();
+    }
+
+    /**
+     * Connect socket to server after setting helper funcitons.
+     */
+    this.connect = function(){
+        this.socket = this.createSocket();
+        console.log(this.socket);
+    }
     
     // Managing position in the room
     this.claimWhitePlace = function(){
@@ -69,6 +101,7 @@ function ConnectionHandler(username) {
     }
 
     this.unclaimPlace = function(){
+        this.turnGameboard(false);
         this.socket.emit('claimPlace', 'watch');
     }
 
@@ -83,7 +116,5 @@ function ConnectionHandler(username) {
 }
 
 window.addEventListener('load', (window, event) => {
-    whitePlayer = document.getElementById('whitePlayer');
-    blackPlayer = document.getElementById('blackPlayer');
-    audience = document.getElementById('audience');
+    client.connect();
 });

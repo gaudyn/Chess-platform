@@ -57,14 +57,14 @@ async function registerAccount(username, password) {
 async function checkUser(username, password) {
     const db = await getClient();
     try {
-        const res = await db.query('SELECT * FROM users WHERE username = $1', [username, password]);
-        await db.end;
-        if (res.rows[0].password) {
+        const res = await db.query('SELECT * FROM users WHERE username = $1', [username]);
+        await db.end();
+        if (res.rowCount == 1 && res.rows[0].password) {
             const match = await bcrypt.compare(password, res.rows[0].password)
             if(match) return true;
         }
     } catch(err) {
-        await db.end;
+        await db.end();
         return false;
     }
     return false;
@@ -124,7 +124,8 @@ async function addMove(game_id, player, move) {
     const db = await getClient();
     try {
         const player_id = await getPlayerId(player);
-        const player_color = (await db.query('SELECT wh_player = $2 as is_white, bl_player = $2 as is_black FROM games WHERE game_id = $1', [game_id, player_id])).rows[0];
+        const res = await db.query('SELECT wh_player = $2 as is_white, bl_player = $2 as is_black FROM games WHERE game_id = $1', [game_id, player_id]);
+        const player_color = res.rows[0];
         if (player_color.is_white) {
             await db.query('INSERT INTO moves(game_id, wh_move) VALUES($1, $2)', [game_id, move]);
         } else if (player_color.is_black) {
@@ -162,7 +163,7 @@ async function finishGame(gameId) {
 exports.users = {
     createAnonymousAccount: createAnonymousAccount,
     createAccout: registerAccount,
-    logIn: isPasswordCorrect
+    logIn: checkUser
 }
 
 exports.games = {
