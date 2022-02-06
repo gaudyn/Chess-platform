@@ -33,6 +33,7 @@ function ConnectionHandler(username) {
 
             this.updateAudience(room.audience);
             this.resetBoard();
+            this.updateMoveList(null);
             if(room.game.moves){
                 for(move of room.game.moves) {
                     this.newMoveMade(move);
